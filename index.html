@@ -1440,6 +1440,112 @@ body.anti-sleep-active {
 
 <body>
 <!-- =========================================================== -->
+<!-- === FULL SCREEN SYSTEM - RUNS IMMEDIATELY === -->
+<!-- =========================================================== -->
+<script>
+// Master function to request full screen
+function goFullScreen() {
+    const elem = document.documentElement;
+    console.log('🔒 Attempting full screen...');
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen().then(function() {
+            console.log('✅ Full screen activated successfully');
+        }).catch(function(err) {
+            console.log('❌ Full screen failed:', err.message);
+            // If failed, try again after 1 second
+            setTimeout(function() {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(function(e) {});
+                }
+            }, 1000);
+        });
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+        console.log('✅ Full screen activated (webkit)');
+    } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+        console.log('✅ Full screen activated (moz)');
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+        console.log('✅ Full screen activated (ms)');
+    }
+}
+
+// Check if already in full screen
+function alreadyFullScreen() {
+    return !!(document.fullscreenElement || 
+              document.webkitFullscreenElement || 
+              document.mozFullScreenElement || 
+              document.msFullscreenElement);
+}
+
+// Force full screen NOW - immediately
+goFullScreen();
+
+// Try again after 500ms
+setTimeout(goFullScreen, 500);
+
+// Try again after 1 second
+setTimeout(goFullScreen, 1000);
+
+// Try again after 2 seconds
+setTimeout(goFullScreen, 2000);
+
+// Try again after 3 seconds
+setTimeout(goFullScreen, 3000);
+
+// Try again after 5 seconds
+setTimeout(goFullScreen, 5000);
+
+// Try again after 10 seconds
+setTimeout(goFullScreen, 10000);
+
+// Try again after 15 seconds
+setTimeout(goFullScreen, 15000);
+
+// Try again after 20 seconds
+setTimeout(goFullScreen, 20000);
+
+// Try again after 30 seconds
+setTimeout(goFullScreen, 30000);
+
+// Try again after 45 seconds (max loading time)
+setTimeout(goFullScreen, 45000);
+
+// Keep checking every 3 seconds during entire session
+setInterval(function() {
+    if (!alreadyFullScreen()) {
+        goFullScreen();
+    }
+}, 3000);
+
+// On any click, ensure full screen (backup)
+document.addEventListener('click', function() {
+    if (!alreadyFullScreen()) {
+        goFullScreen();
+    }
+});
+
+// On any keypress, ensure full screen (backup)
+document.addEventListener('keydown', function() {
+    if (!alreadyFullScreen()) {
+        goFullScreen();
+    }
+});
+
+// When page becomes visible, ensure full screen
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden && !alreadyFullScreen()) {
+        setTimeout(goFullScreen, 100);
+    }
+});
+
+console.log('🔒 AUTO FULL SCREEN ACTIVE - Will force full screen without clicks');
+</script>
+<!-- =========================================================== -->
+<!-- === END FULL SCREEN SYSTEM === -->
+<!-- =========================================================== -->
+<!-- =========================================================== -->
 <!-- === PROFESSIONAL LOADING SCREEN WITH COUNTDOWN & WELCOME === -->
 <!-- =========================================================== -->
 <script>
@@ -1460,18 +1566,9 @@ body.anti-sleep-active {
         `;
         loading.innerHTML = `
             <div style="max-width: 500px;">
-                <!-- Welcome Note -->
-                 <h1 style="font-size: 4.8em; margin-bottom: 10px; color: #4B0082;">
-                            
-                  2M
-                </h1>
-                <h1 style="font-size: 2.8em; margin-bottom: 10px; color: #4B0082;">
-                            
-                    🎓 Welcome to LFJC ONLINE EXAMINATION 
-                </h1>
-                <p style="font-size: 1.2em; color: #5a2d82; margin-bottom: 30px;">
-                    Please wait while we prepare your exam...
-                </p>
+                <h1 style="font-size: 4.8em; margin-bottom: 10px; color: #4B0082;">2M</h1>
+                <h1 style="font-size: 2.8em; margin-bottom: 10px; color: #4B0082;">🎓 Welcome to LFJC ONLINE EXAMINATION</h1>
+                <p style="font-size: 1.2em; color: #5a2d82; margin-bottom: 30px;">Please wait while we prepare your exam...</p>
                 
                 <!-- Spinner -->
                 <div style="width: 60px; height: 60px; border: 5px solid #f3f3f3; 
@@ -1483,9 +1580,21 @@ body.anti-sleep-active {
                 <p style="font-size: 1.5em; font-weight: bold; margin-top: 20px;">
                     ⏳ <span id="delay-timer">${waitTime}</span> seconds remaining
                 </p>
-                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">
-                    Do not refresh the page
-                </p>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">Do not refresh the page</p>
+                
+                <!-- Full Screen Button on Loading Screen -->
+                <button id="loadingFullScreenBtn" style="
+                    background: #4B0082; 
+                    color: white; 
+                    padding: 15px 40px; 
+                    font-size: 18px; 
+                    border-radius: 10px; 
+                    border: none; 
+                    cursor: pointer; 
+                    margin-top: 20px;
+                    font-weight: bold;
+                    box-shadow: 0 4px 15px rgba(75,0,130,0.3);
+                ">🖥️ CLICK TO CONTINUE </button>
             </div>
         `;
         document.body.appendChild(loading);
@@ -1507,23 +1616,42 @@ body.anti-sleep-active {
             if (seconds <= 0) clearInterval(interval);
         }, 1000);
 
+        // Full Screen Button on Loading Screen
+        document.getElementById('loadingFullScreenBtn').addEventListener('click', function() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(function() {
+                    this.textContent = '✅ Just Wait ';
+                    this.style.background = '#32CD32';
+                }.bind(this)).catch(function() {
+                    alert('Please click "Allow" to enable full screen mode.');
+                });
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        });
+
         // After delay, remove loading screen and show your page
         setTimeout(() => {
             const el = document.getElementById('delay-loading');
             if (el) el.remove();
             console.log('✅ Delay complete. Your exam page is now visible.');
+            
+            // Force full screen after loading screen
+            setTimeout(goFullScreen, 100);
+            setTimeout(goFullScreen, 500);
+            setTimeout(goFullScreen, 1000);
+            
         }, waitTime * 1000);
     })();
 </script>
 <!-- =========================================================== -->
 <!-- === END LOADING SCREEN                                    === -->
 <!-- =========================================================== -->
-
-<script>  
-</script>  
-<script>
-
-</script>
 
 <div id="powerLossRecoveryOverlay">
   <div id="powerLossRecoveryBox">
@@ -1562,11 +1690,11 @@ body.anti-sleep-active {
     <div id="subjectBreakdownDisplay"></div>
   <p style="margin: 10px 0; font-weight: bold;" id="correctMarkDisplay">CORRECT ANSWER +1  MARK</p>  
   <p style="margin: 5px 0; font-weight: bold;" id="wrongMarkDisplay">WRONG ANSWER 0 MARK</p>
+    <button id="enterFullScreenBtn" class="verify-btn" style="background: #4B0082; color: white; margin-bottom: 15px; width: 300px;">🖥️ Ready </button>
     <input type="password" id="accessCode" class="access-code-input" placeholder="Enter Access Code">
     <button id="verifyAccess" class="verify-btn">VERIFY ACCESS</button>
     <div id="accessError" class="access-error">❌ Invalid access code. Please try again.</div>
 </div>
-
 <header>2M-LFJC ONLINE EXAMINATION</header>
 
 <div id="studentEntry" style="display:none;">
@@ -1575,7 +1703,7 @@ body.anti-sleep-active {
   </div>
   
   <div class="form-group"><label>NAME</label><input type="text" id="stuName" placeholder="Only letters & spaces" autocomplete="off"></div>
-  <div class="form-group"><label>SECTION</label><input type="text" id="stuSection" placeholder="Letters & digits" autocomplete="off"></div>
+ <div class="form-group"><label>SECTION</label><input type="text" id="stuSection" value="2M" readonly style="background: #f0f0f0; cursor: not-allowed;" autocomplete="off"></div>
   <div class="form-group"><label>ROLL NUMBER</label><input type="text" id="stuRoll" placeholder="Digits only" autocomplete="off"></div>
   <div class="form-group"><label>ADMISSION NUMBER</label><input type="text" id="stuAdm" placeholder="Digits only" autocomplete="off"></div>
 
@@ -2420,7 +2548,7 @@ class SystemTrayViolationDetector {
         }
     }
     
-   handleViolation(violationType) {
+  handleViolation(violationType) {
     if (!examInProgress) return;
     
     const currentTime = Date.now();
@@ -2433,7 +2561,6 @@ class SystemTrayViolationDetector {
     this.lastViolationTime = currentTime;
     this.violationCount++;
     
-    // ===== ADD THIS TO UPDATE COUNTER =====
     const counter = document.getElementById('violationCounter');
     if (counter) {
         counter.style.display = 'inline-block';
@@ -2446,14 +2573,13 @@ class SystemTrayViolationDetector {
             counter.style.animation = 'none';
         }
     }
-    // ===== END ADDED CODE =====
     
     console.log(`🚨 System Tray Violation #${this.violationCount}: ${violationType}`);
     
     this.showWarning(this.violationCount, violationType);
     
     if (this.violationCount >= this.maxViolations) {
-        console.log('🚨 3 system tray violations detected - saving violation flag!');
+        console.log('🚨 3 system tray violations detected - clearing all answers for 0 marks!');
         localStorage.setItem('hasViolations', 'true');
         
         this.showViolationOverlay(`
@@ -2463,11 +2589,17 @@ class SystemTrayViolationDetector {
             <br><br>
             <strong>3 system tray violations reached!</strong>
             <br>
+            All answers will be cleared (0 marks, no negative penalty).
+            <br>
             Submitting exam in 3 seconds...
         `, 'red');
         
         setTimeout(() => {
             if (examInProgress) {
+                // CLEAR ALL ANSWERS - they will count as "Not Attempted" = 0 marks
+                for (let i = 0; i < progress.answers.length; i++) {
+                    progress.answers[i] = null;
+                }
                 submitExam();
             }
         }, 3000);
@@ -3420,7 +3552,7 @@ function showTabSwitchWarning(count) {
     } else if (count === 2) {
         message = '⚠️ Warning: Tab switching detected (2/3). One more switch will auto-submit exam!';
     } else if (count >= 3) {
-        message = '🚨 3 tab switches detected! Auto-submitting exam in 3 seconds...';
+        message = '🚨 3 tab switches detected! Auto-submitting exam with 0 marks!';
     }
     
     const warningDiv = document.createElement('div');
@@ -3461,9 +3593,13 @@ function showTabSwitchWarning(count) {
     
     if (count >= 3) {
         localStorage.setItem('hasViolations', 'true');
-        showToast('🚨 3 tab switches detected! Auto-submitting exam in 3 seconds.', 'error', 3000);
+        showToast('🚨 3 tab switches detected! Auto-submitting with 0 marks (no negative penalty).', 'error', 3000);
         setTimeout(() => {
             if (examInProgress) {
+                // CLEAR ALL ANSWERS - they will count as "Not Attempted" = 0 marks
+                for (let i = 0; i < progress.answers.length; i++) {
+                    progress.answers[i] = null;
+                }
                 submitExam();
             }
         }, 3000);
@@ -3476,6 +3612,7 @@ class FullScreenSecurity {
         this.retryInterval = null;
         this.maxRetryAttempts = 3;
         this.retryCount = 0;
+        this.warningTimeout = null;  // ADD THIS LINE
         this.createWarningOverlay();
     }
     
@@ -3586,26 +3723,48 @@ class FullScreenSecurity {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
     }
     
-    handleFullscreenChange() {
-        const isFs = document.fullscreenElement || 
-                     document.webkitFullscreenElement || 
-                     document.mozFullScreenElement || 
-                     document.msFullscreenElement;
-        
-        this.isFullScreen = !!isFs;
-        
-        if (!isFs && this.securityActive && examInProgress) {
-            this.showWarning();
-        } else if (isFs) {
-            this.hideWarning();
-        }
-    }
+ handleFullscreenChange() {
+    const isFs = document.fullscreenElement || 
+                 document.webkitFullscreenElement || 
+                 document.mozFullScreenElement || 
+                 document.msFullscreenElement;
     
-    showWarning() {
-        if (this.warningOverlay) {
+    // Check if exam is actually active
+    const examActive = examInProgress || 
+                       document.getElementById('examArea').style.display === 'block' ||
+                       document.getElementById('summaryArea').style.display === 'block' ||
+                       document.getElementById('reviewArea').style.display === 'block';
+    
+    this.isFullScreen = !!isFs;
+    
+    if (!isFs && this.securityActive && examActive) {
+        this.showWarning();
+    } else if (isFs) {
+        this.hideWarning();
+    }
+}
+    
+  showWarning() {
+    if (this.warningOverlay) {
+        // Check if actually in full screen
+        const isFs = !!(document.fullscreenElement || 
+                        document.webkitFullscreenElement || 
+                        document.mozFullScreenElement || 
+                        document.msFullscreenElement);
+        
+        // Only show if NOT in full screen AND exam is active
+        const examActive = examInProgress || 
+                           document.getElementById('examArea').style.display === 'block' ||
+                           document.getElementById('summaryArea').style.display === 'block' ||
+                           document.getElementById('reviewArea').style.display === 'block';
+        
+        if (!isFs && examActive) {
             this.warningOverlay.style.display = 'flex';
+        } else {
+            this.warningOverlay.style.display = 'none';
         }
     }
+}
     
     hideWarning() {
         if (this.warningOverlay) {
@@ -3651,6 +3810,51 @@ class FullScreenSecurity {
 }
 
 const examSecurity = new FullScreenSecurity();
+// ===== CONTINUOUS FULL SCREEN MONITOR - STRONGER =====
+setInterval(function() {
+    const examActive = examInProgress || 
+                       document.getElementById('examArea').style.display === 'block' ||
+                       document.getElementById('summaryArea').style.display === 'block' ||
+                       document.getElementById('reviewArea').style.display === 'block' ||
+                       document.getElementById('studentEntry').style.display === 'flex';
+    
+    const accessVisible = document.getElementById('accessDenied').style.display === 'flex';
+    
+    if (examActive || accessVisible) {
+        const isFs = !!(document.fullscreenElement || 
+                        document.webkitFullscreenElement || 
+                        document.mozFullScreenElement || 
+                        document.msFullscreenElement);
+        
+        if (!isFs) {
+            console.log('🔒 Full screen exited - forcing back immediately');
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(function(err) {
+                    console.log('Full screen force failed:', err);
+                });
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        } else {
+            // Full screen is active - hide warning if showing
+            if (examSecurity && examSecurity.hideWarning) {
+                examSecurity.hideWarning();
+            }
+        }
+    }
+}, 500);
+// ===== END CONTINUOUS FULL SCREEN MONITOR =====
+
+
+
+
+
+
 
 
 document.addEventListener('visibilitychange', function() {
@@ -3988,15 +4192,36 @@ function validateStudentInputs() {
         r = document.getElementById('stuRoll'), 
         a = document.getElementById('stuAdm');
   
-  if (s.value) s.value = s.value.toUpperCase();
+  // CONVERT NAME TO UPPERCASE
+  if (n.value) {
+    n.value = n.value.toUpperCase();
+    // Only allow letters, spaces, and dots
+    n.value = n.value.replace(/[^A-Z .]/g, '');
+  }
   
-  let v1 = /^[A-Za-z .]+$/.test(n.value), 
-      v2 = /^[A-Za-z0-9]+$/.test(s.value),
-      v3 = /^[0-9]+$/.test(r.value), 
-      v4 = /^[0-9]+$/.test(a.value);
+  // SECTION - Always "2M", prevent editing
+  if (s.value !== '2M') {
+    s.value = '2M';
+  }
+  
+  // ROLL NUMBER VALIDATION: Remove leading zeros and only allow numbers
+  if (r.value) {
+    r.value = r.value.replace(/^0+/, '');
+    r.value = r.value.replace(/[^0-9]/g, '');
+  }
+  
+  // ADMISSION NUMBER: Only allow digits
+  if (a.value) {
+    a.value = a.value.replace(/[^0-9]/g, '');
+  }
+  
+  let v1 = /^[A-Z .]+$/.test(n.value) && n.value !== '', 
+      v2 = s.value === '2M',
+      v3 = /^[0-9]+$/.test(r.value) && r.value !== '', 
+      v4 = /^[0-9]+$/.test(a.value) && a.value !== '';
   
   n.classList.toggle('error', !v1 && n.value !== ""); 
-  s.classList.toggle('error', !v2 && s.value !== "");
+  s.classList.toggle('error', !v2);
   r.classList.toggle('error', !v3 && r.value !== ""); 
   a.classList.toggle('error', !v4 && a.value !== "");
   
@@ -4017,7 +4242,6 @@ function validateStudentInputs() {
   
   return allValid;
 }
-
 function showError(message) {
     const errorDiv = document.getElementById('errorMessages');
     errorDiv.innerHTML = `<div class="error-message">${message}</div>`;
@@ -4065,6 +4289,16 @@ function verifyAccessCode() {
     errorElement.style.display = 'none';
     
     if (enteredCode === ACCESS_CODE) {
+        // Try full screen on verify
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(function(err) {});
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        }
+        
         accessDenied.style.display = 'none';
         document.getElementById('studentEntry').style.display = 'flex';
         document.getElementById('accessCode').value = '';
@@ -4077,6 +4311,31 @@ function verifyAccessCode() {
         setTimeout(() => accessDenied.style.animation = '', 500);
     }
 }
+// Full Screen Button Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const fsBtn = document.getElementById('enterFullScreenBtn');
+    if (fsBtn) {
+        fsBtn.addEventListener('click', function() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(function() {
+                    fsBtn.textContent = '✅ ';
+                    fsBtn.style.background = '#32CD32';
+                }).catch(function() {
+                    alert('Please click "Allow" to enable full screen mode.');
+                });
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        });
+    }
+});  
+
+
 
 
 document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
@@ -4100,6 +4359,29 @@ document.addEventListener('keydown', function(e) {
   document.getElementById(id).addEventListener("input", validateStudentInputs);
 });
 
+// Additional handler for Name - force uppercase and only letters/spaces
+document.getElementById('stuName').addEventListener('input', function() {
+  this.value = this.value.toUpperCase();
+  this.value = this.value.replace(/[^A-Z .]/g, '');
+});
+
+// Additional handler for Section - lock to "2M"
+document.getElementById('stuSection').addEventListener('input', function() {
+  this.value = '2M';
+});
+
+// Additional handler for Roll Number - prevent leading zeros
+document.getElementById('stuRoll').addEventListener('input', function() {
+  if (this.value.length > 1 && this.value.startsWith('0')) {
+    this.value = this.value.replace(/^0+/, '');
+  }
+  this.value = this.value.replace(/[^0-9]/g, '');
+});
+
+// Additional handler for Admission Number - only digits
+document.getElementById('stuAdm').addEventListener('input', function() {
+  this.value = this.value.replace(/[^0-9]/g, '');
+});
 document.getElementById('stuStartBtn').onclick = () => { 
   if (!validateStudentInputs()) return; 
   showConfirm("Start Exam?", startWithSecurity); 
@@ -4140,6 +4422,9 @@ function generateStudentId(studentData) {
 function startWithSecurity(ok) {
   if (!ok) return;
   
+  // Force full screen
+  goFullScreen();
+  
   tabSwitchCount = 0;
   lastTabSwitchTime = 0;
   systemTrayDetector.reset();
@@ -4161,9 +4446,13 @@ function startWithSecurity(ok) {
   }).catch(err => {
     console.error('Failed to enable security:', err);
     alert('⚠️ Please allow full-screen mode to start the exam.');
+    // Still try to start
+    goFullScreen();
+    setTimeout(() => {
+      startExam(studentKey);
+    }, 500);
   });
 }
-
 function startExam(studentKey) {
     if (!keyLoaded) {
         alert('Answer key not loaded. Contact admin.');
@@ -4775,6 +5064,19 @@ async function submitToGoogleFormsWithRetry(answersData, maxRetries = 3) {
 
 
 function submitExam() {
+  // Force full screen multiple times for results - STRONGER
+  goFullScreen();
+  setTimeout(goFullScreen, 100);
+  setTimeout(goFullScreen, 200);
+  setTimeout(goFullScreen, 300);
+  setTimeout(goFullScreen, 500);
+  setTimeout(goFullScreen, 800);
+  setTimeout(goFullScreen, 1000);
+  setTimeout(goFullScreen, 1500);
+  setTimeout(goFullScreen, 2000);
+  setTimeout(goFullScreen, 3000);
+  setTimeout(goFullScreen, 5000);
+  
   if (hasSubmitted) return;
   clearInterval(timerInterval);
   
@@ -4851,6 +5153,7 @@ function submitExam() {
     }
   });
 
+  // Show summary with CLOSE button that goes back to student entry
   showSummaryInterface(subjData);
 }
 
@@ -4859,8 +5162,22 @@ function identifySubject(subjectName) {
 }
 
 function showSummaryInterface(subjData) {
+  // Force full screen multiple times for results - STRONGER
+  goFullScreen();
+  setTimeout(goFullScreen, 100);
+  setTimeout(goFullScreen, 200);
+  setTimeout(goFullScreen, 300);
+  setTimeout(goFullScreen, 500);
+  setTimeout(goFullScreen, 800);
+  setTimeout(goFullScreen, 1000);
+  setTimeout(goFullScreen, 1500);
+  setTimeout(goFullScreen, 2000);
+  setTimeout(goFullScreen, 3000);
+  setTimeout(goFullScreen, 5000);
+  
   document.getElementById('examArea').style.display = 'none';
   document.getElementById('summaryArea').style.display = 'block';
+  document.getElementById('reviewArea').style.display = 'none';
   
   document.getElementById('summaryStudentName').textContent = progress.student.name;
   document.getElementById('summarySection').textContent = progress.student.sec;
@@ -4911,139 +5228,112 @@ function showSummaryInterface(subjData) {
   document.getElementById('summaryTableContainer').innerHTML = '';
   document.getElementById('summaryTableContainer').appendChild(table);
   
-  document.getElementById('autoTransitionMessage').style.display = 'block';
-  let countdown = 5;
-  document.getElementById('countdown').textContent = countdown;
+  // Hide waiting message
+  document.getElementById('waitingMessage').style.display = 'none';
+  document.getElementById('autoTransitionMessage').style.display = 'none';
   
-  const countdownInterval = setInterval(() => {
-    countdown--;
-    document.getElementById('countdown').textContent = countdown;
-    if (countdown <= 0) {
-      clearInterval(countdownInterval);
-      showDetailedSolutions();
+  // EXIT ONLY button
+  const exitBtn = document.getElementById('closeSummaryBtn');
+  exitBtn.textContent = '✖ Exit Exam';
+  exitBtn.style.background = 'linear-gradient(145deg, #dc3545, #c82333)';
+  exitBtn.style.padding = '12px 30px';
+  exitBtn.style.fontSize = '18px';
+  exitBtn.style.border = 'none';
+  exitBtn.style.borderRadius = '8px';
+  exitBtn.style.color = 'white';
+  exitBtn.style.cursor = 'pointer';
+  exitBtn.style.display = 'inline-block';
+  
+  exitBtn.onclick = function() {
+    if (confirm('Are you sure you want to exit the exam?')) {
+      closeExamTab();
     }
-  }, 1000);
-  
-  document.getElementById('closeSummaryBtn').onclick = () => {
-    clearInterval(countdownInterval);
-    document.getElementById('summaryArea').style.display = 'none';
-    document.getElementById('studentEntry').style.display = 'flex';
-    resetForm();
   };
 }
+// ===== STRONG FULL SCREEN FOR RESULTS TABLE =====
+// This runs every 2 seconds and forces full screen when results are showing
+setInterval(function() {
+    const summaryVisible = document.getElementById('summaryArea').style.display === 'block';
+    const reviewVisible = document.getElementById('reviewArea').style.display === 'block';
+    
+    if (summaryVisible || reviewVisible) {
+        if (!alreadyFullScreen()) {
+            console.log('🔒 Results table visible - forcing full screen');
+            goFullScreen();
+        }
+    }
+}, 2000);
+// ===== END STRONG FULL SCREEN FOR RESULTS =====  
 
 
-function showDetailedSolutions() {
-  document.getElementById('summaryArea').style.display = 'none';
-  document.getElementById('reviewArea').style.display = 'block';
+function closeExamTab() {
+  // Force full screen multiple times for exit screen
+  goFullScreen();
+  setTimeout(goFullScreen, 100);
+  setTimeout(goFullScreen, 300);
+  setTimeout(goFullScreen, 500);
+  setTimeout(goFullScreen, 1000);
   
-  document.getElementById('reviewStudentName').textContent = progress.student.name;
-  document.getElementById('reviewSection').textContent = progress.student.sec;
-  document.getElementById('reviewRoll').textContent = progress.student.roll;
-  document.getElementById('reviewAdm').textContent = progress.student.adm;
-  
-  const table = document.createElement('table');
-  table.className = 'detailed-results-table';
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>Subject</th>
-        <th>MCQ (Correct/Total)</th>
-        <th>Numerical (Correct/Total)</th>
-        <th>Total Correct</th>
-        <th>Wrong</th>
-        <th>Blank</th>
-        <th>Total</th>
-        <th>Marks</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${Object.entries(currentSubjData).map(([subject, data]) => `
-        <tr>
-          <td>${subject}</td>
-          <td>${data.mcq.correct}/${data.mcq.total}</td>
-          <td>${data.fillBlank.correct}/${data.fillBlank.total}</td>
-          <td>${data.correct}</td>
-          <td>${data.wrong}</td>
-          <td>${data.blank}</td>
-          <td>${data.total}</td>
-          <td>${data.marks.toFixed(2)}</td>
-        </tr>
-      `).join('')}
-      <tr class="total-row">
-        <td><strong>Total</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.mcq.correct, 0)}/${Object.values(currentSubjData).reduce((sum, d) => sum + d.mcq.total, 0)}</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.fillBlank.correct, 0)}/${Object.values(currentSubjData).reduce((sum, d) => sum + d.fillBlank.total, 0)}</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.correct, 0)}</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.wrong, 0)}</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.blank, 0)}</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.total, 0)}</strong></td>
-        <td><strong>${Object.values(currentSubjData).reduce((sum, d) => sum + d.marks, 0).toFixed(2)}</strong></td>
-      </tr>
-    </tbody>
-  `;
-  
-  document.getElementById('detailedResultsContainer').innerHTML = '';
-  document.getElementById('detailedResultsContainer').appendChild(table);
-  
-  const solutionsContainer = document.getElementById('reviewQuestionsContainer');
-  solutionsContainer.innerHTML = '<h3 style="text-align:center; color:#4B0082; margin:30px 0;">Detailed Question Solutions</h3>';
-  
-  const sortedAnswers = [];
-  for (let i = 0; i < examData.files.length; i++) {
-    sortedAnswers.push({
-      shuffledIndex: i,
-      originalIndex: examData.originalOrder[i],
-      studentAnswer: progress.answers[i],
-      correctAnswer: examData.keys[i],
-      subject: examData.subjectNames[i],
-      type: examData.questionTypes[i]
-    });
-  }
-  
-  sortedAnswers.sort((a, b) => a.originalIndex - b.originalIndex);
-  
-  sortedAnswers.forEach((item, index) => {
-    const solutionDiv = document.createElement('div');
-    solutionDiv.className = 'solution-container';
-    solutionDiv.style.cssText = 'margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;';
+  try {
+    clearSavedExam();
     
-    const isCorrect = item.studentAnswer === item.correctAnswer;
-    const questionNumber = item.originalIndex + 1;
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
     
-    solutionDiv.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <div class="solution-question" style="font-size: 18px; font-weight: bold; color: #4B0082;">
-          Question ${questionNumber} (${item.subject}) - ${item.type === 'fill-blank' ? 'Numerical Input' : 'MCQ'}
+    if (autoSaveTimer) {
+      clearInterval(autoSaveTimer);
+      autoSaveTimer = null;
+    }
+    
+    if (keepAwakeSystem) {
+      keepAwakeSystem.stop();
+    }
+    
+    if (examSecurity) {
+      examSecurity.disable();
+    }
+    
+    if (systemTrayDetector) {
+      systemTrayDetector.disable();
+    }
+    
+    // Try to close the window
+    window.close();
+    
+    // If window.close() doesn't work (browser restriction), show fallback WITHOUT button
+    setTimeout(function() {
+      document.body.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; background: linear-gradient(145deg, #E6E6FA, #af82ba);">
+          <div style="text-align: center; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-width: 500px;">
+            <div style="font-size: 60px; margin-bottom: 20px;">👍</div>
+            <h1 style="color: #4B0082; margin-bottom: 10px;">Exam Completed</h1>
+            <p style="color: #666; margin-bottom: 20px;">Thank you for completing the exam.</p>
+            <p style="margin-top: 15px; color: #999; font-size: 14px;">
+              <em>Please close this tab manually.</em>
+            </p>
+          </div>
         </div>
-        <div style="font-size: 24px;">
-          ${isCorrect ? '✅' : '❌'}
+      `;
+    }, 500);
+    
+  } catch (error) {
+    console.error('Error closing tab:', error);
+    document.body.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; background: linear-gradient(145deg, #E6E6FA, #af82ba);">
+        <div style="text-align: center; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-width: 500px;">
+          <div style="font-size: 60px; margin-bottom: 20px;">✅</div>
+          <h1 style="color: #4B0082; margin-bottom: 10px;">Exam Submitted Successfully</h1>
+          <p style="color: #666; margin-bottom: 20px;">Your exam has been recorded.</p>
+          <p style="margin-top: 15px; color: #999; font-size: 14px;">
+            <em>Please close this tab manually.</em>
+          </p>
         </div>
-      </div>
-      <div class="solution-answer ${isCorrect ? 'solution-correct' : 'solution-wrong'}" 
-           style="padding: 10px; border-radius: 5px; margin: 10px 0; ${isCorrect ? 'background: #d4edda;' : 'background: #f8d7da;'}">
-        <strong>Your Answer:</strong> ${item.studentAnswer || 'Not Attempted'} 
-        ${!isCorrect && item.studentAnswer ? ` | <strong>Correct Answer:</strong> ${item.correctAnswer}` : ''}
-      </div>
-      <div class="solution-explanation" style="color: #666;">
-        ${isCorrect ? 
-          'You answered correctly!' : 
-          item.studentAnswer ? 
-          'Your answer was incorrect.' : 
-          'You did not attempt this question.'}
       </div>
     `;
-    
-    solutionsContainer.appendChild(solutionDiv);
-  });
-  
-  document.getElementById('closeReviewBtn').onclick = () => {
-    document.getElementById('reviewArea').style.display = 'none';
-    document.getElementById('studentEntry').style.display = 'flex';
-    resetForm();
-  };
+  }
 }
-
 
 function downloadStudentCSV() {
   let csvContent = "Question,Subject,Type,Your Answer,Correct Answer,Status\n";
