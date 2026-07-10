@@ -1369,11 +1369,11 @@ button:focus {
     gap: 6px;
   }
   
-  #paletteContainer button {
-    width: 35px;
-    height: 35px;
-    font-size: 12px;
-  }
+#paletteContainer button {
+    width: 26px !important;
+    height: 30px !important;
+    font-size: 9px !important;
+}
   
   .question-image-container {
     min-height: 300px;
@@ -1435,6 +1435,142 @@ body.anti-sleep-active {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+/* ===== SIDEBAR LAYOUT FOR EXAM ===== */
+.exam-layout {
+    display: flex;
+    gap: 20px;
+    max-width: 100%;
+    margin: 0;
+    padding: 16px 30px;
+    min-height: calc(100vh - 140px);
+    flex-direction: row; 
+.exam-main {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 370px);
+    order: 1;
+}
+
+.exam-sidebar {
+    width: 350px;
+    flex-shrink: 0;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px 15px 10px 15px;
+    border: 1px solid #e6e6fa;
+    height: calc(100vh - 120px);
+    overflow-y: scroll;
+    position: sticky;
+    top: 10px;
+    order: 2;
+}
+.sidebar-title {
+    text-align: center;
+    font-weight: bold;
+    color: #4B0082;
+    margin-bottom: 6px;
+    font-size: 13px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #4B0082;
+}
+
+#paletteContainer {
+    display: grid !important;
+    grid-template-columns: repeat(10, 1fr) !important;
+    gap: 4px 2px !important;  /* gap: row column */
+    margin: 0 !important;
+    padding: 8px 4px !important;  /* padding: top/bottom left/right */
+    max-width: 100% !important;
+    justify-items: center !important;
+}
+#paletteContainer button {
+    width: 24px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1.5px solid #4B0082;
+    background: white;
+    color: #4B0082;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+#paletteContainer button.selected {
+    background: #32CD32;
+    color: white;
+    border-color: #228B22;
+}
+
+#paletteContainer button.reviewed {
+    background: #FFD700;
+    color: #000;
+    border-color: #DAA520;
+}
+
+#paletteContainer button.current {
+    border: 3px solid red !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255,0,0,0.4);
+    animation: pulseCurrent 1s ease-in-out infinite;
+}
+
+@keyframes pulseCurrent {
+    0%, 100% { transform: scale(1.05); }
+    50% { transform: scale(1.15); }
+}
+
+.palette-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 11px;
+}
+
+.palette-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.palette-legend-item .color-box {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+}
+
+.palette-legend-item .color-box.current {
+    border: 2px solid red;
+}
+
+@media (max-width: 768px) {
+    .exam-layout {
+        flex-direction: column;
+    }
+    
+    .exam-sidebar {
+        width: 100%;
+        position: relative;
+        max-height: 250px;
+        top: 0;
+    }
+    
+    #paletteContainer {
+        grid-template-columns: repeat(8, 1fr) !important;
+    }
+}  
 </style>
 </head>
 
@@ -1688,7 +1824,7 @@ console.log('🔒 AUTO FULL SCREEN ACTIVE - Will force full screen without click
  <h1>LFJC ONLINE EXAMINATION</h1>
     <p style="font-size: 1.2em; margin: 10px 0;" id="totalQuestionsDisplay">Loading...</p>
     <div id="subjectBreakdownDisplay"></div>
-  <p style="margin: 10px 0; font-weight: bold;" id="correctMarkDisplay">CORRECT ANSWER +1  MARK</p>  
+  <p style="margin: 10px 0; font-weight: bold;" id="correctMarkDisplay">CORRECT ANSWER +1 MARKS</p>  
   <p style="margin: 5px 0; font-weight: bold;" id="wrongMarkDisplay">WRONG ANSWER 0 MARK</p>
     <button id="enterFullScreenBtn" class="verify-btn" style="background: #4B0082; color: white; margin-bottom: 15px; width: 300px;">🖥️ Ready </button>
     <input type="password" id="accessCode" class="access-code-input" placeholder="Enter Access Code">
@@ -1746,26 +1882,49 @@ console.log('🔒 AUTO FULL SCREEN ACTIVE - Will force full screen without click
 </div>
 
 <div id="examArea" style="display:none;">
-<div id="examHeader">
-    <div id="stuInfo"></div>
-    <div id="stuQInfo"></div>
-    <div>
-        <span id="timerEl">🕒 00:00</span>
-        <span id="violationCounter" style="margin-left: 20px; color: orange; font-weight: bold; display: none;">⚠️ Violations: 0/3</span>
+    <div id="examHeader">
+        <div id="stuInfo"></div>
+        <div id="stuQInfo"></div>
+        <div>
+            <span id="timerEl">🕒 00:00</span>
+            <span id="violationCounter" style="margin-left: 20px; color: orange; font-weight: bold; display: none;">⚠️ Violations: 0/3</span>
+        </div>
     </div>
-</div>
 
-  <div id="questionContainer" style="text-align:center;margin-top:10px;"></div>
+    <div class="exam-layout">
+        <div class="exam-main">
+            <div id="questionContainer" style="text-align:center;margin-top:10px;"></div>
 
-  <div class="navContainer">
-    <button class="navBtn" id="prevBtn">⬅ Previous</button>
-    <button class="navBtn" id="markReviewBtn">Review</button>
-    <button class="navBtn" id="nextBtn">Next ➡</button>
-    <button class="navBtn" id="submitBtn">Submit Exam</button>
-  </div>
+            <div class="navContainer">
+                <button class="navBtn" id="prevBtn">⬅ Previous</button>
+                <button class="navBtn" id="markReviewBtn">Review</button>
+                <button class="navBtn" id="nextBtn">Next ➡</button>
+                <button class="navBtn" id="submitBtn">Submit Exam</button>
+            </div>
+        </div>
 
-  <div id="paletteContainer"></div>
-</div>
+        <div class="exam-sidebar">
+            <div class="sidebar-title">📋 Questions</div>
+            <div id="paletteContainer"></div>
+            <div class="palette-legend">
+                <div class="palette-legend-item">
+                    <span class="color-box" style="background:#32CD32;"></span> Attempted
+                </div>
+                <div class="palette-legend-item">
+                    <span class="color-box" style="background:white;border-color:#4B0082;"></span> Not Attempted
+                </div>
+                <div class="palette-legend-item">
+                    <span class="color-box" style="background:#FFD700;"></span> Marked for Review
+                </div>
+                <div class="palette-legend-item">
+                    <span class="color-box current" style="border:2px solid red;"></span> Current
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ </div>
 
 
 <div id="summaryArea">
@@ -4539,6 +4698,7 @@ function renderPalette() {
     btn.className = 'palette-btn';
     btn.textContent = i + 1;
     btn.tabindex = "0";
+    btn.setAttribute('data-index', i);
     
     if (examData.questionTypes[i] === 'fill-blank') {
       btn.style.background = '#FFD700';
@@ -4549,16 +4709,16 @@ function renderPalette() {
     if (progress.review[i]) btn.classList.add('reviewed');
     if (i === progress.currentIndex) btn.classList.add('current');
     
-    btn.onclick = () => {
-      progress.currentIndex = i;
+    btn.onclick = function() {
+      progress.currentIndex = parseInt(this.getAttribute('data-index'));
       renderQuestion();
       updateNavButtons();
+      updatePalette();
     };
     
     container.appendChild(btn);
   }
 }
-
 function updatePalette() {
   const buttons = document.querySelectorAll('.palette-btn');
   buttons.forEach((btn, i) => {
@@ -5507,4 +5667,4 @@ console.log(`📁 Expecting ${TOTAL_QUESTIONS} answers`);
 console.log("✅ Active subjects for this exam:", ACTIVE_EXAM_SUBJECTS.join(", "));
 </script>
 </body>
-</html>
+</html> 
