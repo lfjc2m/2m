@@ -1443,7 +1443,8 @@ body.anti-sleep-active {
     margin: 0;
     padding: 16px 30px;
     min-height: calc(100vh - 140px);
-    flex-direction: row; 
+    flex-direction: row;
+}
 .exam-main {
     flex: 1;
     min-width: 0;
@@ -1824,7 +1825,7 @@ console.log('🔒 AUTO FULL SCREEN ACTIVE - Will force full screen without click
  <h1>LFJC ONLINE EXAMINATION</h1>
     <p style="font-size: 1.2em; margin: 10px 0;" id="totalQuestionsDisplay">Loading...</p>
     <div id="subjectBreakdownDisplay"></div>
-  <p style="margin: 10px 0; font-weight: bold;" id="correctMarkDisplay">CORRECT ANSWER +1 MARKS</p>  
+  <p style="margin: 10px 0; font-weight: bold;" id="correctMarkDisplay">CORRECT ANSWER +1  MARK</p>  
   <p style="margin: 5px 0; font-weight: bold;" id="wrongMarkDisplay">WRONG ANSWER 0 MARK</p>
     <button id="enterFullScreenBtn" class="verify-btn" style="background: #4B0082; color: white; margin-bottom: 15px; width: 300px;">🖥️ Ready </button>
     <input type="password" id="accessCode" class="access-code-input" placeholder="Enter Access Code">
@@ -2014,7 +2015,7 @@ console.log('🔒 AUTO FULL SCREEN ACTIVE - Will force full screen without click
 // =============================================
 // 📚 CHANGE THIS NUMBER FOR THE WEEK
 // =============================================
-const EXAM_WEEK = 1;  // ← Change this: 1,2,3,4,5,6,7,8,9,10
+const EXAM_WEEK = 2;  // ← Change this: 1,2,3,4,5,6,7,8,9,10
 
 // =============================================
 // WEEK PATTERNS (Set this up once)
@@ -2093,7 +2094,6 @@ const ACTIVE_EXAM_SUBJECTS = EXAM_SETUP.activeForForms;
 console.log('📚 Week:', EXAM_WEEK);
 console.log('📚 Subjects:', EXAM_SETUP.subjects.map(s => s.name).join(', '));
 console.log('📊 Total Questions:', TOTAL_QUESTIONS);
-
 
 const SUBJECTS = EXAM_SETUP.subjects.map(s => ({
     name: s.name,
@@ -2206,16 +2206,7 @@ const FORM_FIELDS = {
 
 
 const GOOGLE_FORMS = {
-    '1': "https://docs.google.com/forms/d/e/1FAIpQLSfDqJ96BQj-kHj6RwHW1Vb1jSUQ7x-2lxMbSEAtb1GNVGB6xA/formResponse",
-    '2': "https://docs.google.com/forms/d/e/1FAIpQLSdnZdv40aL5Ru4r-R0k6VJdpU-1V1BfgOBl9s_PHwBjkgToYg/formResponse",
-    '3': "https://docs.google.com/forms/d/e/1FAIpQLSeFGU6ngws5V1Un--VElcO7ivRtXUcOLzdIvEUQNu7RrZvpLw/formResponse",
-    '4': "https://docs.google.com/forms/d/e/1FAIpQLSdwMn5az6oBg6GZknUib_G-qHECxPb7bXg2yoqK_vjxGU4JQg/formResponse",
-    '5': "https://docs.google.com/forms/d/e/1FAIpQLSeuej9VVaxkv5Ail7Pbk5yzS5HuOlen2bVz4L2rsdywWBIvmQ/formResponse",
-    '6': "https://docs.google.com/forms/d/e/1FAIpQLSdV9wo2ANl-BP9HFj0ZvlVYSClJnHj4JEEZpXS6CNx6BIkLYQ/formResponse",
-    '7': "https://docs.google.com/forms/d/e/1FAIpQLSciFvDMM8IKo5K1YgV0DXHXyzZtBNnz8kZB_WybewvN0wQUvA/formResponse",
-    '8': "https://docs.google.com/forms/d/e/1FAIpQLSd9Oj2FaCzpmqQesWmQL-5t1FKfUfzz5AaVTc-Dq-eDujUr3g/formResponse",
-    '9': "https://docs.google.com/forms/d/e/1FAIpQLSdeUH8oatXXsB9NuQpsbRWfnGj0N5Cbh7SVe07tmcUW9WJj8A/formResponse",
-    '10': "https://docs.google.com/forms/d/e/1FAIpQLSf3n6fMXa3mP_ij279XKLELfohGwuMfmWWc9fTfM3VgY2oWLg/formResponse"
+      '1': "https://docs.google.com/forms/d/e/1FAIpQLSf3n6fMXa3mP_ij279XKLELfohGwuMfmWWc9fTfM3VgY2oWLg/formResponse"
 };
 
 
@@ -2796,31 +2787,35 @@ class SystemTrayViolationDetector {
     this.showWarning(this.violationCount, violationType);
     
     if (this.violationCount >= this.maxViolations) {
-        console.log('🚨 3 system tray violations detected - clearing all answers for 0 marks!');
-        localStorage.setItem('hasViolations', 'true');
-        
-        this.showViolationOverlay(`
-            🚨 EXAM VIOLATION DETECTED
-            <br><br>
-            ${violationType}
-            <br><br>
-            <strong>3 system tray violations reached!</strong>
-            <br>
-            All answers will be cleared (0 marks, no negative penalty).
-            <br>
-            Submitting exam in 3 seconds...
-        `, 'red');
-        
-        setTimeout(() => {
-            if (examInProgress) {
-                // CLEAR ALL ANSWERS - they will count as "Not Attempted" = 0 marks
-                for (let i = 0; i < progress.answers.length; i++) {
-                    progress.answers[i] = null;
-                }
-                submitExam();
-            }
-        }, 3000);
-    }
+    console.log('🚨 3 system tray violations detected!');
+    localStorage.setItem('hasViolations', 'true');
+    
+    // ✅ SHOW RED FULL SCREEN WITH SUBMIT BUTTON
+    showViolationSubmitScreen(`
+        <div style="font-size: 48px; margin-bottom: 20px;">🚨</div>
+        <div style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">EXAM VIOLATION DETECTED</div>
+        <div style="font-size: 18px; margin-bottom: 10px;">${violationType}</div>
+        <div style="font-size: 16px; margin-bottom: 30px; color: #ffcccc;">
+            <strong>3 system tray violations reached!</strong><br>
+            All answers will be cleared (0 marks).
+        </div>
+        <button id="violationSubmitBtn" style="
+            padding: 20px 60px;
+            font-size: 28px;
+            font-weight: bold;
+            background: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(50, 205, 50, 0.5);
+            animation: pulse 1s infinite;
+        ">✅ CLICK TO SUBMIT</button>
+        <div style="margin-top: 20px; font-size: 14px; color: #ffcccc;">
+            You must click the button above to submit your exam.
+        </div>
+    `);
+ }
 }
     
     showWarning(count, violationType) {
@@ -2894,7 +2889,247 @@ class SystemTrayViolationDetector {
         console.log('🔄 System tray violations reset');
     }
 }
+  // ============================================================
+// VIOLATION SUBMIT SCREEN - RED FULL SCREEN WITH BUTTON
+// ============================================================
 
+function showViolationSubmitScreen(message) {
+    // Remove any existing overlay
+    const existing = document.getElementById('violationSubmitOverlay');
+    if (existing) existing.remove();
+    
+    // Create full screen red overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'violationSubmitOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 0, 0, 0.95);
+        z-index: 999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="max-width: 600px; width: 100%;">
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Add click handler for the submit button
+    setTimeout(() => {
+        const submitBtn = document.getElementById('violationSubmitBtn');
+        if (submitBtn) {
+            submitBtn.onclick = function() {
+                // Clear answers
+                for (let i = 0; i < progress.answers.length; i++) {
+                    progress.answers[i] = null;
+                }
+                // Remove overlay
+                overlay.remove();
+                // Submit exam
+                submitExam();
+            };
+        }
+    }, 100);
+}
+
+ // ============================================================
+// GREEN SUBMIT SCREEN - NO HISTORY ENTRY
+// ============================================================
+
+function showGreenSubmitScreen(fullUrl, answersData) {
+    // Remove any existing overlay
+    const existing = document.getElementById('greenSubmitOverlay');
+    if (existing) existing.remove();
+    
+    // Create full screen green overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'greenSubmitOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 128, 0, 0.95);
+        z-index: 999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+        animation: fadeIn 0.5s ease;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="max-width: 600px; width: 100%;">
+            <div style="font-size: 60px; margin-bottom: 20px;">✅</div>
+            <div style="font-size: 32px; font-weight: bold; margin-bottom: 15px;">EXAM COMPLETED!</div>
+            <div style="font-size: 18px; margin-bottom: 10px; color: #d4edda;">
+                Your answers have been recorded.
+            </div>
+            <div style="font-size: 16px; margin-bottom: 30px; color: #b7e4c7;">
+                <strong>Student:</strong> ${answersData.student.name}<br>
+                <strong>Roll:</strong> ${answersData.student.roll}
+            </div>
+            <button id="greenSubmitBtn" style="
+                padding: 20px 60px;
+                font-size: 28px;
+                font-weight: bold;
+                background: #ffffff;
+                color: #006400;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+                animation: pulse 1.5s infinite;
+            ">📤 SUBMIT</button>
+            <div style="margin-top: 20px; font-size: 14px; color: #b7e4c7;">
+                Click the button above to submit your exam.
+            </div>
+        </div>
+    `;
+    
+    // Add fade-in animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(overlay);
+    
+    // Add click handler for the submit button
+    setTimeout(() => {
+        const submitBtn = document.getElementById('greenSubmitBtn');
+        if (submitBtn) {
+            submitBtn.onclick = function() {
+                console.log('✅ Student clicked SUBMIT on green screen');
+                
+                // ✅ FIX: Use hidden iframe - NO HISTORY, NO TAB
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'display:none; width:0; height:0; border:none;';
+                iframe.src = fullUrl;
+                document.body.appendChild(iframe);
+                
+                // Remove iframe after 3 seconds
+                setTimeout(() => {
+                    if (iframe.parentNode) {
+                        iframe.parentNode.removeChild(iframe);
+                    }
+                    console.log('📤 Form submitted via iframe - No history entry');
+                }, 3000);
+                
+                // Remove overlay immediately
+                overlay.remove();
+                
+                // Show results
+                showSummaryInterface(currentSubjData);
+                
+                // Save locally as backup
+                saveSubmissionLocally(answersData);
+                localStorage.removeItem('hasViolations');
+                clearSavedExam();
+                
+                // Show success toast
+                showToast('✅ Exam submitted successfully!', 'success', 3000);
+            };
+        }
+    }, 100);
+}
+// ===== SUBMIT WITH GREEN SCREEN (NO UNLINK! STUDENT CLICKS SUBMIT) =====
+function submitWithWindowOpen(answersData) {
+    return new Promise((resolve) => {
+        const FORM_URL = GOOGLE_FORMS[assignedForm];
+        const marks = calculateSubjectMarks(answersData.summary);
+        
+        try {
+            // Build the URL with parameters
+            const params = new URLSearchParams();
+            
+            // Student Information
+            params.append(FORM_FIELDS.STUDENT_NAME, answersData.student.name);
+            params.append(FORM_FIELDS.SECTION, answersData.student.sec);
+            params.append(FORM_FIELDS.ROLL_NUMBER, answersData.student.roll);
+            params.append(FORM_FIELDS.ADMISSION_NUMBER, answersData.student.adm);
+            
+            const subjectCodes = (EXAM_SETUP.activeForForms || []).map(s => {
+                if (s === "MATHS_A") return "MA";
+                if (s === "MATHS_B") return "MB";
+                if (s === "MATHS") return "M";
+                if (s === "PHYSICS") return "P";
+                if (s === "CHEMISTRY") return "C";
+                if (s === "BOTANY") return "B";
+                if (s === "ZOOLOGY") return "Z";
+                if (s === "BZ") return "BZ";
+                return s.substring(0,1);
+            }).join(', ');
+            
+            const today = new Date();
+            const dateStr = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear().toString().slice(-2)}`;
+            params.set(FORM_FIELDS.SECTION, answersData.student.sec + " " + dateStr + " " + subjectCodes);
+            
+            // Subject Marks
+            const activeSubjects = EXAM_SETUP.activeForForms || [];
+            for (let subject of activeSubjects) {
+                if (marks[subject] !== undefined) {
+                    const markValue = marks[subject].toFixed(2);
+                    switch(subject) {
+                        case "PHYSICS": params.append(FORM_FIELDS.PHYSICS, markValue); break;
+                        case "CHEMISTRY": params.append(FORM_FIELDS.CHEMISTRY, markValue); break;
+                        case "MATHS": params.append(FORM_FIELDS.MATHS, markValue); break;
+                        case "MATHS_A": params.append(FORM_FIELDS.MATHS_A, markValue); break;
+                        case "MATHS_B": params.append(FORM_FIELDS.MATHS_B, markValue); break;
+                        case "BOTANY": params.append(FORM_FIELDS.BOTANY, markValue); break;
+                        case "ZOOLOGY": params.append(FORM_FIELDS.ZOOLOGY, markValue); break;
+                        case "BZ": params.append(FORM_FIELDS.BZ, markValue); break;
+                    }
+                }
+            }
+            
+            params.append(FORM_FIELDS.TOTAL_MARKS, marks.total.toFixed(2));
+            params.append(FORM_FIELDS.ALL_ANSWERS, formatAllAnswersString(progress.answers));
+            
+            const fullUrl = FORM_URL + '?' + params.toString();
+            
+            // ✅ Show GREEN SUBMIT SCREEN (instead of Google Form)
+            showGreenSubmitScreen(fullUrl, answersData);
+            
+            // Save locally as backup
+            saveSubmissionLocally(answersData);
+            localStorage.removeItem('hasViolations');
+            clearSavedExam();
+            
+            resolve(true);
+            
+        } catch (error) {
+            console.error('Submission error:', error);
+            resolve(false);
+        }
+    });
+}
 
 async function loadAnswerKey() {
     try {
@@ -3808,19 +4043,39 @@ function showTabSwitchWarning(count) {
         }, 5000);
     }
     
-    if (count >= 3) {
-        localStorage.setItem('hasViolations', 'true');
-        showToast('🚨 3 tab switches detected! Auto-submitting with 0 marks (no negative penalty).', 'error', 3000);
-        setTimeout(() => {
-            if (examInProgress) {
-                // CLEAR ALL ANSWERS - they will count as "Not Attempted" = 0 marks
-                for (let i = 0; i < progress.answers.length; i++) {
-                    progress.answers[i] = null;
-                }
-                submitExam();
-            }
-        }, 3000);
-    }
+   if (count >= 3) {
+    localStorage.setItem('hasViolations', 'true');
+    showToast('🚨 3 tab switches detected!', 'error', 3000);
+    
+    // ✅ SHOW RED FULL SCREEN WITH SUBMIT BUTTON
+    setTimeout(() => {
+        if (examInProgress) {
+            showViolationSubmitScreen(`
+                <div style="font-size: 48px; margin-bottom: 20px;">🚨</div>
+                <div style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">TAB SWITCH VIOLATION</div>
+                <div style="font-size: 18px; margin-bottom: 10px;">3 tab switches detected</div>
+                <div style="font-size: 16px; margin-bottom: 30px; color: #ffcccc;">
+                    <strong>All answers will be cleared (0 marks).</strong>
+                </div>
+                <button id="violationSubmitBtn" style="
+                    padding: 20px 60px;
+                    font-size: 28px;
+                    font-weight: bold;
+                    background: #32CD32;
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    box-shadow: 0 0 30px rgba(50, 205, 50, 0.5);
+                    animation: pulse 1s infinite;
+                ">✅ CLICK TO SUBMIT</button>
+                <div style="margin-top: 20px; font-size: 14px; color: #ffcccc;">
+                    You must click the button above to submit your exam.
+                </div>
+            `);
+        }
+    }, 1000);
+ }
 }
 class FullScreenSecurity {
     constructor() {
@@ -4170,15 +4425,7 @@ function getFormFields(formId) {
 }
 
 function getAssignedForm(studentData) {
-    const forms = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-    
-    if (studentData.roll && !isNaN(studentData.roll)) {
-        const rollNumber = parseInt(studentData.roll);
-        const formIndex = (rollNumber - 1) % forms.length;
-        console.log("Assigned Form:", forms[formIndex]);
-        return forms[formIndex];
-    }
-    
+    // All students use the same form
     return '1';
 }
 
@@ -5101,6 +5348,11 @@ function calculateSubjectMarks(summary) {
 }
 
 
+// ===== SUBMISSION QUEUE SYSTEM =====
+let submissionQueue = [];
+let isSubmitting = false;
+let submissionCounter = 0;
+
 async function submitToGoogleForms(answersData) {
     const FORM_URL = GOOGLE_FORMS[assignedForm];
     
@@ -5111,96 +5363,25 @@ async function submitToGoogleForms(answersData) {
     }
 
     try {
-        const marks = calculateSubjectMarks(answersData.summary);
-        const formData = new URLSearchParams();
+        console.log(`📤 Adding student ${answersData.student.name} to submission queue...`);
         
-
-formData.append(FORM_FIELDS.STUDENT_NAME, answersData.student.name);
-formData.append(FORM_FIELDS.SECTION, answersData.student.sec);
-formData.append(FORM_FIELDS.ROLL_NUMBER, answersData.student.roll);
-formData.append(FORM_FIELDS.ADMISSION_NUMBER, answersData.student.adm);
-
-
-const subjectCodes = (EXAM_SETUP.activeForForms || []).map(s => {
-    if (s === "MATHS_A") return "MA";
-    if (s === "MATHS_B") return "MB";
-    if (s === "MATHS") return "M";
-    if (s === "PHYSICS") return "P";
-    if (s === "CHEMISTRY") return "C";
-    if (s === "BOTANY") return "B";
-    if (s === "ZOOLOGY") return "Z";
-    if (s === "BZ") return "BZ";
-    return s.substring(0,1);
-}).join(', ');
-
-const today = new Date();
-const dateStr = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear().toString().slice(-2)}`;
-
-
-formData.set(FORM_FIELDS.SECTION, answersData.student.sec + " " + dateStr + " " + subjectCodes);
-
-
-
-   // Only send marks for subjects that actually have questions
-const activeSubjects = EXAM_SETUP.activeForForms || [];
-
-for (let subject of activeSubjects) {
-    // Check if this subject has marks (has questions)
-    if (marks[subject] !== undefined) {
-        const markValue = marks[subject].toFixed(2);
-        
-        switch(subject) {
-            case "PHYSICS":
-                formData.append(FORM_FIELDS.PHYSICS, markValue);
-                break;
-            case "CHEMISTRY":
-                formData.append(FORM_FIELDS.CHEMISTRY, markValue);
-                break;
-            case "MATHS":
-                formData.append(FORM_FIELDS.MATHS, markValue);
-                break;
-            case "MATHS_A":
-                formData.append(FORM_FIELDS.MATHS_A, markValue);
-                break;
-            case "MATHS_B":
-                formData.append(FORM_FIELDS.MATHS_B, markValue);
-                break;
-            case "BOTANY":
-                formData.append(FORM_FIELDS.BOTANY, markValue);
-                break;
-            case "ZOOLOGY":
-                formData.append(FORM_FIELDS.ZOOLOGY, markValue);
-                break;
-            case "BZ":
-                formData.append(FORM_FIELDS.BZ, markValue);
-                break;
-        }
-    }
-}
-      
-        formData.append(FORM_FIELDS.TOTAL_MARKS, marks.total.toFixed(2));
-        
-        
-        const allAnswersString = formatAllAnswersString(progress.answers);
-        formData.append(FORM_FIELDS.ALL_ANSWERS, allAnswersString);
-        
-        console.log("✅ Final submission with subjects:", (EXAM_SETUP.activeForForms || []).join(", "));
-        console.log("📤 Total marks:", marks.total.toFixed(2));
-        console.log("📤 Answers string length:", allAnswersString.length);
-        
-        await fetch(FORM_URL, {
-            method: "POST",
-            mode: "no-cors",
-            body: formData
+        // Add to queue
+        const result = await new Promise((resolve, reject) => {
+            submissionQueue.push({
+                data: answersData,
+                resolve: resolve,
+                reject: reject,
+                timestamp: Date.now()
+            });
+            
+            // Start processing queue if not already running
+            if (!isSubmitting) {
+                processSubmissionQueue();
+            }
         });
         
-        console.log("✅ Google Forms submission completed");
-        showToast('✅ Exam submitted successfully!', 'success', 5000);
+        return result;
         
-        // Clear violation flag on successful submission
-        localStorage.removeItem('hasViolations');
-        clearSavedExam();
-        return true;
     } catch (error) {
         console.error("❌ Submission error:", error);
         saveSubmissionLocally(answersData);
@@ -5208,6 +5389,127 @@ for (let subject of activeSubjects) {
         return false;
     }
 }
+
+// ===== PROCESS QUEUE WITH STAGGERED DELAYS =====
+async function processSubmissionQueue() {
+    if (isSubmitting) return;
+    if (submissionQueue.length === 0) return;
+    
+    isSubmitting = true;
+    
+    while (submissionQueue.length > 0) {
+        const queueItem = submissionQueue.shift();
+        const { data: answersData, resolve, reject } = queueItem;
+        
+        try {
+            // Calculate delay based on queue position (2-5 seconds between students)
+            const delay = 2000 + (Math.random() * 3000);
+            
+            console.log(`⏳ Waiting ${(delay/1000).toFixed(1)}s before submitting ${answersData.student.name}`);
+            await sleep(delay);
+            
+            console.log(`📤 Submitting #${++submissionCounter} for ${answersData.student.name}`);
+            
+            // Submit using simple window.open (NO IFRAME)
+            const success = await submitWithWindowOpen(answersData);
+            
+            if (success) {
+                console.log(`✅ Submission #${submissionCounter} successful for ${answersData.student.name}`);
+                resolve(true);
+            } else {
+                saveSubmissionLocally(answersData);
+                reject(new Error('Submission failed'));
+            }
+            
+        } catch (error) {
+            console.error(`❌ Submission #${submissionCounter} failed:`, error);
+            saveSubmissionLocally(answersData);
+            reject(error);
+        }
+    }
+    
+    isSubmitting = false;
+    console.log('✅ All submissions processed!');
+}
+
+// ===== SUBMIT WITH GREEN SCREEN (NO UNLINK! STUDENT CLICKS SUBMIT) =====
+function submitWithWindowOpen(answersData) {
+    return new Promise((resolve) => {
+        const FORM_URL = GOOGLE_FORMS[assignedForm];
+        const marks = calculateSubjectMarks(answersData.summary);
+        
+        try {
+            // Build the URL with parameters
+            const params = new URLSearchParams();
+            
+            // Student Information
+            params.append(FORM_FIELDS.STUDENT_NAME, answersData.student.name);
+            params.append(FORM_FIELDS.SECTION, answersData.student.sec);
+            params.append(FORM_FIELDS.ROLL_NUMBER, answersData.student.roll);
+            params.append(FORM_FIELDS.ADMISSION_NUMBER, answersData.student.adm);
+            
+            const subjectCodes = (EXAM_SETUP.activeForForms || []).map(s => {
+                if (s === "MATHS_A") return "MA";
+                if (s === "MATHS_B") return "MB";
+                if (s === "MATHS") return "M";
+                if (s === "PHYSICS") return "P";
+                if (s === "CHEMISTRY") return "C";
+                if (s === "BOTANY") return "B";
+                if (s === "ZOOLOGY") return "Z";
+                if (s === "BZ") return "BZ";
+                return s.substring(0,1);
+            }).join(', ');
+            
+            const today = new Date();
+            const dateStr = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear().toString().slice(-2)}`;
+            params.set(FORM_FIELDS.SECTION, answersData.student.sec + " " + dateStr + " " + subjectCodes);
+            
+            // Subject Marks
+            const activeSubjects = EXAM_SETUP.activeForForms || [];
+            for (let subject of activeSubjects) {
+                if (marks[subject] !== undefined) {
+                    const markValue = marks[subject].toFixed(2);
+                    switch(subject) {
+                        case "PHYSICS": params.append(FORM_FIELDS.PHYSICS, markValue); break;
+                        case "CHEMISTRY": params.append(FORM_FIELDS.CHEMISTRY, markValue); break;
+                        case "MATHS": params.append(FORM_FIELDS.MATHS, markValue); break;
+                        case "MATHS_A": params.append(FORM_FIELDS.MATHS_A, markValue); break;
+                        case "MATHS_B": params.append(FORM_FIELDS.MATHS_B, markValue); break;
+                        case "BOTANY": params.append(FORM_FIELDS.BOTANY, markValue); break;
+                        case "ZOOLOGY": params.append(FORM_FIELDS.ZOOLOGY, markValue); break;
+                        case "BZ": params.append(FORM_FIELDS.BZ, markValue); break;
+                    }
+                }
+            }
+            
+            params.append(FORM_FIELDS.TOTAL_MARKS, marks.total.toFixed(2));
+            params.append(FORM_FIELDS.ALL_ANSWERS, formatAllAnswersString(progress.answers));
+            
+            const fullUrl = FORM_URL + '?' + params.toString();
+            
+            // ✅ Show GREEN SUBMIT SCREEN (instead of Google Form)
+            showGreenSubmitScreen(fullUrl, answersData);
+            
+            // Save locally as backup
+            saveSubmissionLocally(answersData);
+            localStorage.removeItem('hasViolations');
+            clearSavedExam();
+            
+            resolve(true);
+            
+        } catch (error) {
+            console.error('Submission error:', error);
+            resolve(false);
+        }
+    });
+}
+
+// ===== HELPER =====
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+        
+       
 
 function saveSubmissionLocally(answersData) {
     try {
@@ -5247,7 +5549,7 @@ function updateSubmissionStatus(status, message) {
 async function submitToGoogleFormsWithRetry(answersData, maxRetries = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-            console.log(`📤 Submission attempt ${attempt}/${maxRetries}`);
+            console.log(`📤 Submission attempt ${attempt}/${maxRetries} for ${answersData.student.name}`);
             
             if (!navigator.onLine) {
                 console.log('📴 Offline - saving locally');
@@ -5262,9 +5564,9 @@ async function submitToGoogleFormsWithRetry(answersData, maxRetries = 3) {
             }
             
             if (attempt < maxRetries) {
-                const delay = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
+                const delay = 3000 * attempt;
                 console.log(`⏳ Retrying in ${delay/1000} seconds...`);
-                await new Promise(resolve => setTimeout(resolve, delay));
+                await sleep(delay);
             }
             
         } catch (error) {
@@ -5279,7 +5581,6 @@ async function submitToGoogleFormsWithRetry(answersData, maxRetries = 3) {
     
     return { success: false, error: 'Max retries exceeded' };
 }
-
 
 function submitExam() {
   // Force full screen multiple times for results - STRONGER
@@ -5360,8 +5661,9 @@ function submitExam() {
   
   submitToGoogleFormsWithRetry(answersData).then(result => {
     if (result.success) {
-      console.log('✅ Google Forms submission successful');
-      updateSubmissionStatus('success', '✅ Answers successfully submitted !');
+  console.log('✅ Google Forms submission successful');
+  updateSubmissionStatus('success', '✅ Answers successfully submitted !');
+  localStorage.setItem('exam_submitted', 'true'); // ✅ ADD THIS LINE
     } else if (result.offline) {
       console.log('📴 Submission saved offline');
       updateSubmissionStatus('error', '📴 Submission saved offline. Will auto-retry when online.');
@@ -5450,7 +5752,9 @@ function showSummaryInterface(subjData) {
   document.getElementById('waitingMessage').style.display = 'none';
   document.getElementById('autoTransitionMessage').style.display = 'none';
   
-  // EXIT ONLY button
+  // ============================================================
+  // ✅ EXIT BUTTON - HIDDEN UNTIL FORM SUBMISSION CONFIRMED
+  // ============================================================
   const exitBtn = document.getElementById('closeSummaryBtn');
   exitBtn.textContent = '✖ Exit Exam';
   exitBtn.style.background = 'linear-gradient(145deg, #dc3545, #c82333)';
@@ -5460,13 +5764,59 @@ function showSummaryInterface(subjData) {
   exitBtn.style.borderRadius = '8px';
   exitBtn.style.color = 'white';
   exitBtn.style.cursor = 'pointer';
-  exitBtn.style.display = 'inline-block';
+  exitBtn.style.display = 'none'; // ✅ HIDDEN BY DEFAULT - WAITING FOR SUBMISSION
   
   exitBtn.onclick = function() {
-    if (confirm('Are you sure you want to exit the exam?')) {
+    if (confirm('✅ Your exam has been submitted successfully! Are you sure you want to exit?')) {
       closeExamTab();
     }
   };
+  
+  // ✅ SHOW EXIT BUTTON ONLY AFTER FORM SUBMISSION
+  const submissionStatus = document.getElementById('summarySubmissionStatus');
+  if (submissionStatus) {
+    const isSuccess = submissionStatus.textContent.includes('successfully submitted');
+    const isSubmitted = googleFormsSubmissionStatus === 'success' || 
+                        localStorage.getItem('exam_submitted') === 'true';
+    
+    if (isSuccess || isSubmitted) {
+      exitBtn.style.display = 'inline-block';
+      console.log('✅ Exit button shown - Form submission confirmed');
+    } else {
+      // Keep checking for submission status
+      const checkInterval = setInterval(function() {
+        const statusText = submissionStatus.textContent || '';
+        if (statusText.includes('successfully submitted') || 
+            googleFormsSubmissionStatus === 'success') {
+          exitBtn.style.display = 'inline-block';
+          clearInterval(checkInterval);
+          console.log('✅ Exit button now shown - Submission completed');
+        }
+      }, 1000);
+      
+      setTimeout(function() {
+        clearInterval(checkInterval);
+        if (exitBtn.style.display !== 'inline-block') {
+          console.log('⚠️ Submission still pending - Exit button hidden');
+        }
+      }, 10000);
+    }
+  }
+  
+  // ✅ Add submission status observer
+  const observer = new MutationObserver(function() {
+    const statusDiv = document.getElementById('summarySubmissionStatus');
+    if (statusDiv && statusDiv.textContent.includes('successfully submitted')) {
+      exitBtn.style.display = 'inline-block';
+      observer.disconnect();
+      console.log('✅ Exit button shown via observer');
+    }
+  });
+  
+  const statusDiv = document.getElementById('summarySubmissionStatus');
+  if (statusDiv) {
+    observer.observe(statusDiv, { childList: true, subtree: true, characterData: true });
+  }
 }
 // ===== STRONG FULL SCREEN FOR RESULTS TABLE =====
 // This runs every 2 seconds and forces full screen when results are showing
