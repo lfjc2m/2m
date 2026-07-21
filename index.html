@@ -1618,147 +1618,6 @@ body.anti-sleep-active {
     #paletteContainer {
         grid-template-columns: repeat(8, 1fr) !important;
     }
-} 
-/* ===== BLUR EFFECTS FOR ANSWERED QUESTIONS ===== */
-.question-transition {
-    transition: filter 0.5s ease, opacity 0.5s ease;
-}
-
-.blur-overlay {
-    animation: fadeInOverlay 0.3s ease;
-}
-
-@keyframes fadeInOverlay {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Lock icon pulse */
-.blur-overlay div div {
-    animation: lockPulse 2s ease-in-out infinite;
-}
-
-@keyframes lockPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* Glow effect for locked state */
-.blur-overlay div {
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.05);
-}
-
-/* Smooth transition when unblurring */
-.question-fade-in {
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0.7; transform: scale(0.98); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* ===== RAPID NAVIGATION WARNING ===== */
-@keyframes slideDown {
-    from { top: -100px; opacity: 0; }
-    to { top: 100px; opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { top: 100px; opacity: 1; }
-    to { top: -100px; opacity: 0; }
-}
-
-#rapidNavWarning {
-    animation: slideDown 0.5s ease;
-}
-
-/* Navigation button disabled state */
-.navBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-}
-/* ===== STRONGER BLUR EFFECT ===== */
-.question-transition {
-    transition: filter 0.5s ease, opacity 0.5s ease;
-}
-
-/* Overlay to completely hide content */
-.blur-overlay-strong {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.85) !important;
-}
-
-/* Ensure no green option is visible */
-.optBtn.selected {
-    background: #32CD32 !important;
-    color: white !important;
-    border-color: #2fa92f !important;
-}
-
-/* When blurred, hide everything */
-.question-blurred .optBtn,
-.question-blurred .fill-blank-container,
-.question-blurred .numerical-keypad {
-    filter: blur(35px) !important;  /* ← Increased from 20px to 35px */
-    opacity: 0.01 !important;        /* ← Made almost invisible */
-    pointer-events: none !important;
-    user-select: none !important;
-}
-
-.question-blurred .question-image-container {
-    filter: blur(30px) !important;   /* ← Increased from 16px to 30px */
-}
-
-/* Add blur to the entire question container when locked */
-.question-blurred .question-transition {
-    filter: blur(40px) !important;
-    opacity: 0.02 !important;
-}
-/* Lock overlay should be on top */
-.blur-lock-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    border-radius: 12px;
-}
-
-.blur-lock-overlay div {
-    background: rgba(0, 0, 0, 0.9);
-    padding: 30px 50px;
-    border-radius: 16px;
-    text-align: center;
-    border: 2px solid #FFD700;
-    box-shadow: 0 0 60px rgba(255, 215, 0, 0.1);
-}
-
-.blur-lock-overlay .lock-icon {
-    font-size: 50px;
-    margin-bottom: 15px;
-}
-
-.blur-lock-overlay .lock-title {
-    color: white;
-    font-weight: bold;
-    font-size: 22px;
-}
-
-.blur-lock-overlay .lock-subtitle {
-    color: #666;
-    font-size: 14px;
-    margin-top: 8px;
 }  
 </style>
 </head>
@@ -2082,20 +1941,18 @@ setInterval(function() {
 </div>
 
 <div id="examArea" style="display:none;">
-<div id="examHeader">
-    <div id="stuInfo"></div>
-    <div id="stuQInfo"></div>
-    <div>
-        <span id="timerEl">🕒 00:00</span>
-        <span id="reviewCounter" style="margin-left: 20px; color: #1E90FF; font-weight: bold;">👁️ ANSWERED REVIEWS: 0/10</span>
-        <span id="violationCounter" style="margin-left: 20px; color: orange; font-weight: bold; display: none;">⚠️ Violations: 0/3</span>
-        <span id="navViolationCounter" style="margin-left: 20px; color: orange; font-weight: bold; display: none;">⚠️ Searching: 0/5</span>
+    <div id="examHeader">
+        <div id="stuInfo"></div>
+        <div id="stuQInfo"></div>
+        <div>
+            <span id="timerEl">🕒 00:00</span>
+            <span id="violationCounter" style="margin-left: 20px; color: orange; font-weight: bold; display: none;">⚠️ Violations: 0/3</span>
+        </div>
     </div>
-</div>
     <!-- ===== PROGRESS BAR ===== -->
-   <div id="progressBarWrapper" style="width: 100%; height: 8px; background: #e8e8e8; border-radius: 4px; margin: 10px 0 5px 0; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
-    <div id="progressBarFill" style="width: 0%; height: 100%; background:  #32CD32; border-radius: 4px; transition: width 0.5s ease;"></div>
-   </div>
+    <div id="progressBarWrapper" style="width: 100%; height: 8px; background: #e8e8e8; border-radius: 4px; margin: 10px 0 5px 0; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+        <div id="progressBarFill" style="width: 0%; height: 100%; background:  #32CD32; border-radius: 4px; transition: width 0.5s ease;"></div>
+    </div>
     <div id="progressStats" style="display: flex; justify-content: space-between; font-size: 12px; color: #666; margin: 0 0 10px 0; padding: 0 2px;">
         <span id="answeredCount">0 / 0</span>
         <span id="progressPercentage">0%</span>
@@ -2283,14 +2140,14 @@ const WEEK_PRESETS = {
 // ALL SUBJECTS (Define once)
 // =============================================
 const ALL_SUBJECTS = {
-    "MATHS_A":   { questions: 80, numerical: 0 },
-    "MATHS_B":   { questions: 80, numerical: 0 },
-    "MATHS":     { questions: 80, numerical: 0 },
-    "PHYSICS":   { questions: 80, numerical: 0 },
-    "CHEMISTRY": { questions: 80, numerical: 0 },
-    "BOTANY":    { questions: 80, numerical: 0 },
-    "ZOOLOGY":   { questions: 80, numerical: 0 },
-    "BZ":        { questions: 80, numerical: 0 },
+    "MATHS_A":   { questions: 40, numerical: 0 },
+    "MATHS_B":   { questions: 40, numerical: 0 },
+    "MATHS":     { questions: 40, numerical: 0 },
+    "PHYSICS":   { questions: 40, numerical: 0 },
+    "CHEMISTRY": { questions: 40, numerical: 0 },
+    "BOTANY":    { questions: 40, numerical: 0 },
+    "ZOOLOGY":   { questions: 40, numerical: 0 },
+    "BZ":        { questions: 40, numerical: 0 },
 };
 
 // =============================================
@@ -2310,7 +2167,7 @@ function buildExamSetup() {
         }
     });
     if (subjects.length === 0) {
-        subjects.push({ name: "MATHS_B", questions: 80, numerical: 0 });
+        subjects.push({ name: "MATHS_B", questions: 40, numerical: 0 });
     }
     return {
         subjects: subjects,
@@ -2488,24 +2345,9 @@ let connectionStatusElement = null;
 let autoSaveIndicator = null;
 let powerLossRecoveryData = null;
 let resumeInProgress = false;
-let secretPasswordBuffer = '';
-let unblurPasswordBuffer = '';
-let fastPassBuffer = '';           // ← NEW: Buffer for fastpass
-const SUBMIT_PASSWORD = 'ssrell';
-const UNBLUR_PASSWORD = 'ub';
-const FAST_PASS = 'fastpass';      // ← NEW: Password to override pause
-let navigationTrackingEnabled = true;  // ← ADD THIS LINE
-  let secretUnlocked = false;
-let submitUnlocked = false;
-
-// ===== NAVIGATION TRACKING VARIABLES =====
-let navigationHistory = [];
-let navigationWarnings = 0;
-const MAX_NAV_WARNINGS = Infinity; // ← UNLIMITED warnings
-const RAPID_NAV_THRESHOLD = 6; // ← CHANGED: 6 clicks
-const RAPID_NAV_TIME = 10000; // ← CHANGED: 10 seconds
-let lastNavWarningTime = 0;
-let isNavWarningShowing = false;
+let secretPasswordBuffer = '';        // ADD THIS
+const SECRET_PASSWORD = 'ssrell';     // ADD THIS
+let secretUnlocked = false;           // ADD THIS
 
 let autoClickInterval = null;
 let keepAwakeSystem = null;
@@ -2521,14 +2363,7 @@ const subjects = EXAM_SETUP.subjects.map(s => s.name);
 let examData = {files: [], subjectNames: [], keys: [], originalOrder: [], questionTypes: []};
 let progress = null, timerInterval = null;
 let examEndTime = null; 
-// ===== REVIEW TRACKING =====
-let reviewCount = 0;
-const MAX_REVIEWS = 10;
-let lastReviewTime = 0;
-const REVIEW_COOLDOWN = 30000;
-let reviewHistory = [];
-const REVIEW_WINDOW = 60000;
-let reviewedQuestions = new Set(); // ← Track unique questions reviewed
+
 function startAutoClick() {
     if (autoClickInterval) {
         clearInterval(autoClickInterval);
@@ -3047,7 +2882,6 @@ class SystemTrayViolationDetector {
     this.lastViolationTime = currentTime;
     this.violationCount++;
     
-    // ===== UPDATE SYSTEM TRAY VIOLATION COUNTER =====
     const counter = document.getElementById('violationCounter');
     if (counter) {
         counter.style.display = 'inline-block';
@@ -3066,34 +2900,35 @@ class SystemTrayViolationDetector {
     this.showWarning(this.violationCount, violationType);
     
     if (this.violationCount >= this.maxViolations) {
-        console.log('🚨 3 system tray violations detected!');
-        localStorage.setItem('hasViolations', 'true');
-        
-        showViolationSubmitScreen(`
-            <div style="font-size: 48px; margin-bottom: 20px;">🚨</div>
-            <div style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">EXAM VIOLATION DETECTED</div>
-            <div style="font-size: 18px; margin-bottom: 10px;">${violationType}</div>
-            <div style="font-size: 16px; margin-bottom: 30px; color: #ffcccc;">
-                <strong>3 system tray violations reached!</strong><br>
-                All answers will be cleared (0 marks).
-            </div>
-            <button id="violationSubmitBtn" style="
-                padding: 20px 60px;
-                font-size: 28px;
-                font-weight: bold;
-                background: #32CD32;
-                color: white;
-                border: none;
-                border-radius: 12px;
-                cursor: pointer;
-                box-shadow: 0 0 30px rgba(50, 205, 50, 0.5);
-                animation: pulse 1s infinite;
-            ">✅ CLICK TO SUBMIT</button>
-            <div style="margin-top: 20px; font-size: 14px; color: #ffcccc;">
-                
-            </div>
-        `);
-    }
+    console.log('🚨 3 system tray violations detected!');
+    localStorage.setItem('hasViolations', 'true');
+    
+    // ✅ SHOW RED FULL SCREEN WITH SUBMIT BUTTON
+    showViolationSubmitScreen(`
+        <div style="font-size: 48px; margin-bottom: 20px;">🚨</div>
+        <div style="font-size: 28px; font-weight: bold; margin-bottom: 20px;">EXAM VIOLATION DETECTED</div>
+        <div style="font-size: 18px; margin-bottom: 10px;">${violationType}</div>
+        <div style="font-size: 16px; margin-bottom: 30px; color: #ffcccc;">
+            <strong>3 system tray violations reached!</strong><br>
+            All answers will be cleared (0 marks).
+        </div>
+        <button id="violationSubmitBtn" style="
+            padding: 20px 60px;
+            font-size: 28px;
+            font-weight: bold;
+            background: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(50, 205, 50, 0.5);
+            animation: pulse 1s infinite;
+        ">✅ CLICK TO SUBMIT</button>
+        <div style="margin-top: 20px; font-size: 14px; color: #ffcccc;">
+            
+        </div>
+    `);
+ }
 }
     
     showWarning(count, violationType) {
@@ -3260,8 +3095,8 @@ function showGreenSubmitScreen(fullUrl, answersData) {
     
     overlay.innerHTML = `
         <div style="max-width: 600px; width: 100%; animation: fadeIn 0.3s ease;">
-            <div style="font-size: 60px; margin-bottom: 20px;"></div>
-            <div style="font-size: 32px; font-weight: bold; margin-bottom: 15px;"></div>
+            <div style="font-size: 60px; margin-bottom: 20px;">✅</div>
+            <div style="font-size: 32px; font-weight: bold; margin-bottom: 15px;">EXAM COMPLETED!</div>
             <div style="font-size: 18px; margin-bottom: 10px; color: #d4edda;">
                 Your exam is ready to submit.
             </div>
@@ -4744,24 +4579,9 @@ function submitNumericalAnswer(questionIndex) {
     
     progress.answers[questionIndex] = answer;
     showToast('✓ Answer submitted!', 'success', 2000);
-    
-    // LOCK immediately after submission
-    secretUnlocked = false;
-    
-    // ===== CLEAR REVIEW TIMER =====
-    if (reviewTimer) {
-        clearTimeout(reviewTimer);
-        reviewTimer = null;
-    }
-    
     updatePalette();
-    updateProgressBar();
+    updateProgressBar(); // <--- ADDED THIS LINE
     saveExamProgress();
-    
-    // Re-render to show blur
-    setTimeout(() => {
-        renderQuestion();
-    }, 100);
     
     setTimeout(() => {
         if (questionIndex < examData.files.length - 1) {
@@ -4771,6 +4591,7 @@ function submitNumericalAnswer(questionIndex) {
         }
     }, 1500);
 }
+
 function getFormFields(formId) {
     return FORM_FIELDS;
 }
@@ -4866,17 +4687,13 @@ function renderQuestion() {
   const imagePath = getBestImagePath(originalIndex);
   const questionType = examData.questionTypes[idx];
   
-  // Check if answered and should be blurred
-  const isAnswered = progress.answers[idx] !== null && progress.answers[idx] !== '';
-  const shouldBlur = isAnswered && !secretUnlocked;
-  
-  console.log(`🖼️ Loading: ${imagePath} (Question ${originalIndex}/${TOTAL_QUESTIONS}) - ${examData.subjectNames[idx]} - ${questionType} ${shouldBlur ? '(BLURRED)' : ''}`);
+  console.log(`🖼️ Loading: ${imagePath} (Question ${originalIndex}/${TOTAL_QUESTIONS}) - ${examData.subjectNames[idx]} - ${questionType}`);
   
   let optionsHTML = '';
   
   if (questionType === 'fill-blank') {
     optionsHTML = `
-      <div class="fill-blank-container" style="${shouldBlur ? 'filter: blur(25px); pointer-events: none; opacity: 0.05;' : ''}">
+      <div class="fill-blank-container">
         <div style="margin: 20px 0; font-weight: bold; color: #4B0082; font-size: 18px;">
           Enter answer:
         </div>
@@ -4889,18 +4706,16 @@ function renderQuestion() {
                  style="padding: 12px 18px; font-size: 22px; border: 2px solid #4B0082; border-radius: 8px; width: 200px; text-align: center; outline: none; font-weight: bold;"
                  oninput="handleNumericalInput(this, ${idx})"
                  onkeypress="handleNumericalKeyPress(event, ${idx})"
-                 tabindex="0"
-                 ${shouldBlur ? 'disabled' : ''}>
+                 tabindex="0">
           <button class="submit-fill-blank-btn" 
                   onclick="submitNumericalAnswer(${idx})"
                   tabindex="0"
-                  style="padding: 12px 24px; background: linear-gradient(145deg, #32CD32, #228B22); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;"
-                  ${shouldBlur ? 'disabled' : ''}>
+                  style="padding: 12px 24px; background: linear-gradient(145deg, #32CD32, #228B22); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
             Submit
           </button>
         </div>
         
-        <div class="numerical-keypad" style="${shouldBlur ? 'filter: blur(25px); pointer-events: none; opacity: 0.05;' : ''}">
+        <div class="numerical-keypad">
           <div class="keypad-grid">
             ${[1,2,3,4,5,6,7,8,9].map(num => `
               <button class="num-key-btn" onclick="handleKeypadButton('${num}', ${idx})" tabindex="0">${num}</button>
@@ -4914,91 +4729,31 @@ function renderQuestion() {
     `;
   } else {
     optionsHTML = `
-        <div class="options-container" style="${shouldBlur ? 'filter: blur(35px); pointer-events: none; opacity: 0.01;' : ''}">
-        <button class="optBtn ${progress.answers[idx] === 'A' ? 'selected' : ''}" data-opt="A" tabindex="0" ${shouldBlur ? 'disabled' : ''}>A</button>
-        <button class="optBtn ${progress.answers[idx] === 'B' ? 'selected' : ''}" data-opt="B" tabindex="0" ${shouldBlur ? 'disabled' : ''}>B</button>
-        <button class="optBtn ${progress.answers[idx] === 'C' ? 'selected' : ''}" data-opt="C" tabindex="0" ${shouldBlur ? 'disabled' : ''}>C</button>
-        <button class="optBtn ${progress.answers[idx] === 'D' ? 'selected' : ''}" data-opt="D" tabindex="0" ${shouldBlur ? 'disabled' : ''}>D</button>
+      <div class="options-container">
+        <button class="optBtn ${progress.answers[idx] === 'A' ? 'selected' : ''}" data-opt="A" tabindex="0">A</button>
+        <button class="optBtn ${progress.answers[idx] === 'B' ? 'selected' : ''}" data-opt="B" tabindex="0">B</button>
+        <button class="optBtn ${progress.answers[idx] === 'C' ? 'selected' : ''}" data-opt="C" tabindex="0">C</button>
+        <button class="optBtn ${progress.answers[idx] === 'D' ? 'selected' : ''}" data-opt="D" tabindex="0">D</button>
       </div>
     `;
   }
   
- // Build the container with blur
-let containerHTML = `
-  <div class="question-transition question-fade-in" style="position: relative;">
-   <div style="${shouldBlur ? 'filter: blur(35px);' : ''}">
+  container.innerHTML = `
+    <div class="question-transition question-fade-in">
       ${renderQuestionImage(originalIndex)}
-    </div>
-    ${optionsHTML}
-`;
-
-// Add blur overlay if answered and locked
-if (shouldBlur) {
-  containerHTML += `
-    <div id="blurOverlay-${idx}" style="
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      cursor: default;
-    ">
-      <div style="
-        background: rgba(0, 0, 0, 0.9);
-        padding: 40px 50px;
-        border-radius: 16px;
-        text-align: center;
-        border: 2px solid #FFD700;
-        box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
-      ">
-        <div style="font-size: 50px; margin-bottom: 10px;">🔒</div>
-        <div style="color: #FFD700; font-weight: bold; font-size: 22px; margin-bottom: 5px;">Answered</div>
-        <div style="color: #888; font-size: 14px; margin-bottom: 15px;"></div>
-        <button onclick="reviewQuestionQuick(${idx})" style="
-          padding: 12px 30px;
-          background: linear-gradient(145deg, #1E90FF, #0066CC);
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-size: 16px;
-          font-weight: bold;
-          cursor: pointer;
-          box-shadow: 0 0 30px rgba(30, 144, 255, 0.4);
-          transition: all 0.3s ease;
-        " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 50px rgba(30, 144, 255, 0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 30px rgba(30, 144, 255, 0.4)';">
-          👁️ MODIFY ANSWER
-        </button>
-        <div style="color: #FFFFFF; font-weight: bold; font-size: 18px; margin-top: 15px;">
-          Reviews remaining: <span id="reviewRemaining">${MAX_REVIEWS - reviewCount}</span>
-        </div>
-      </div>
+      ${optionsHTML}
     </div>
   `;
-}
-
-containerHTML += `</div>`;
-
-
-container.innerHTML = containerHTML;
   
   updateQuestionInfo();
   
-  if (questionType !== 'fill-blank' && !shouldBlur) {
+  if (questionType !== 'fill-blank') {
     document.querySelectorAll('.optBtn').forEach(btn => {
-      if (!btn.disabled) {
-        btn.onclick = function() { 
-          selectOption(this.getAttribute('data-opt')); 
-        };
-      }
+      btn.onclick = function() { 
+        selectOption(this.getAttribute('data-opt')); 
+      };
     });
-  } else if (questionType === 'fill-blank' && !shouldBlur) {
+  } else {
     setTimeout(() => {
       const input = document.getElementById('fillBlankInput');
       if (input) input.focus();
@@ -5006,7 +4761,7 @@ container.innerHTML = containerHTML;
   }
   
   updatePalette();
-  updateProgressBar();
+  updateProgressBar(); // <--- ADDED THIS LINE
   
   const next1 = originalIndex + 1;
   const next2 = originalIndex + 2;
@@ -5017,165 +4772,7 @@ container.innerHTML = containerHTML;
     loadImageSafe(next2);
   }
 }
-// ===== REVIEW QUESTION FOR 5 SECONDS =====
-let reviewTimer = null;
 
-function reviewQuestionQuick(questionIndex) {
-    const now = Date.now();
-    
-    // ===== CHECK IF ALREADY REVIEWED THIS QUESTION =====
-    const isAlreadyReviewed = reviewedQuestions.has(questionIndex);
-    
-    // ===== CHECK MAX REVIEWS (only count unique questions) =====
-    if (!isAlreadyReviewed && reviewCount >= MAX_REVIEWS) {
-        // ===== SHOW CENTER SCREEN WARNING =====
-        showCenterScreenMessage('⚠️ MAXIMUM 10 REVIEWS REACHED!', 'red');
-        return;
-    }
-    
-    // ===== RECORD REVIEW (only if not already reviewed) =====
-    if (!isAlreadyReviewed) {
-        reviewCount++;
-        reviewedQuestions.add(questionIndex);
-        
-        // Update review counter
-        const reviewCounter = document.getElementById('reviewCounter');
-        if (reviewCounter) {
-            reviewCounter.textContent = `👁️ Modify Answers: ${reviewCount}/${MAX_REVIEWS}`;
-            if (reviewCount >= MAX_REVIEWS) {
-                reviewCounter.style.color = 'red';
-            } else if (reviewCount >= MAX_REVIEWS - 2) {
-                reviewCounter.style.color = 'orange';
-            } else {
-                reviewCounter.style.color = '#1E90FF';
-            }
-        }
-        
-        const remaining = MAX_REVIEWS - reviewCount;
-        showToast(`👁️ Question visible for 5 seconds (${remaining} reviews remaining)`, 'info', 3000);
-    } else {
-        showToast(`👁️ Question visible for 5 seconds (already reviewed)`, 'info', 3000);
-    }
-    
-    // ===== UPDATE HISTORY =====
-    lastReviewTime = now;
-    reviewHistory.push({
-        time: now,
-        question: questionIndex,
-        isNew: !isAlreadyReviewed
-    });
-    
-    if (reviewHistory.length > 20) {
-        reviewHistory.shift();
-    }
-    
-    // ===== CLEAR ANY EXISTING TIMER =====
-    if (reviewTimer) {
-        clearTimeout(reviewTimer);
-        reviewTimer = null;
-    }
-    
-    // ===== UNBLUR THE QUESTION =====
-    secretUnlocked = true;
-    renderQuestion();
-    
-    // ===== AUTO RE-LOCK AFTER 5 SECONDS =====
-    reviewTimer = setTimeout(() => {
-        secretUnlocked = false;
-        renderQuestion();
-        showToast('🔒 Question re-locked', 'info', 2000);
-        reviewTimer = null;
-    }, 5000);
-}// ===== SHOW CENTER SCREEN MESSAGE =====
-function showCenterScreenMessage(message, color = 'red') {
-    // Remove existing center message
-    const existing = document.getElementById('centerMessageOverlay');
-    if (existing) existing.remove();
-    
-    // Create center message overlay
-    const overlay = document.createElement('div');
-    overlay.id = 'centerMessageOverlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        z-index: 999999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        color: white;
-        font-family: 'SF Pro Display', Arial, sans-serif;
-        text-align: center;
-        padding: 20px;
-        animation: fadeInOverlay 0.3s ease;
-    `;
-    
-    const isRed = color === 'red';
-    
-    overlay.innerHTML = `
-        <div style="
-            max-width: 500px;
-            width: 90%;
-            padding: 50px 40px;
-            background: ${isRed ? 'rgba(180, 0, 0, 0.95)' : 'rgba(0, 0, 0, 0.95)'};
-            border-radius: 20px;
-            border: ${isRed ? '4px solid #FF0000' : '4px solid #FFD700'};
-            box-shadow: ${isRed ? '0 0 60px rgba(255, 0, 0, 0.3)' : '0 0 60px rgba(255, 215, 0, 0.2)'};
-            animation: modalPopIn 0.3s ease;
-        ">
-            <div style="font-size: 60px; margin-bottom: 15px;">🚫</div>
-            <div style="font-size: 32px; font-weight: bold; margin-bottom: 15px; color: #FFD700;">
-                ${message}
-            </div>
-            <div style="font-size: 18px; color: #ffcccc; margin-bottom: 10px;">
-                You have used all 10 reviews.
-            </div>
-            <div style="font-size: 16px; color: #aaa; margin-bottom: 25px;">
-                Remaining answered questions can not be reviewed .
-            </div>
-            <button id="closeCenterMessageBtn" style="
-                padding: 15px 50px;
-                font-size: 20px;
-                font-weight: bold;
-                background: linear-gradient(145deg, #32CD32, #228B22);
-                color: white;
-                border: none;
-                border-radius: 12px;
-                cursor: pointer;
-                box-shadow: 0 0 30px rgba(50, 205, 50, 0.3);
-                transition: all 0.3s ease;
-            ">OK</button>
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Add click handler for OK button
-    document.getElementById('closeCenterMessageBtn').onclick = function() {
-        overlay.remove();
-    };
-    
-    // Click outside to close
-    overlay.onclick = function(e) {
-        if (e.target === overlay) {
-            overlay.remove();
-        }
-    };
-    
-    // Auto close after 5 seconds
-    setTimeout(() => {
-        if (document.getElementById('centerMessageOverlay')) {
-            overlay.remove();
-        }
-    }, 5000);
-} 
-  
 function selectOption(opt) {
     const idx = progress.currentIndex;
     
@@ -5185,25 +4782,11 @@ function selectOption(opt) {
     } else {
         progress.answers[idx] = opt;
         console.log(`Selected option ${opt} for question ${idx + 1}`);
-        
-        // When answer is selected, LOCK it immediately
-        secretUnlocked = false;
-        
-        // ===== CLEAR REVIEW TIMER =====
-        if (reviewTimer) {
-            clearTimeout(reviewTimer);
-            reviewTimer = null;
-        }
-        
-        // Re-render to show blur
-        setTimeout(() => {
-            renderQuestion();
-        }, 100);
     }
     
     updateOptionButtons();
     updatePalette();
-    updateProgressBar();
+    updateProgressBar(); // <--- ADDED THIS LINE
     
     if (examInProgress) {
         setTimeout(() => saveExamProgress(), 500);
@@ -5380,52 +4963,17 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
 
 document.addEventListener('keydown', function(e) {
-  if (document.getElementById('examArea').style.display === 'block') {
-    
-    // ===== CHECK IF PAUSED - DISABLE ALL NAVIGATION KEYS =====
-    const isPaused = document.getElementById('pauseScreenOverlay') !== null && 
-                     document.getElementById('pauseScreenOverlay').style.display !== 'none';
-    
-    if (isPaused) {
-      // Block ALL navigation keys during pause
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
-          e.key === ' ' || e.key === 'Space' || e.key === 'PageUp' || e.key === 'PageDown' ||
-          e.key === 'Home' || e.key === 'End') {
-        e.preventDefault();
-        e.stopPropagation();
-        showToast('⏳ Navigation is paused! Wait or type "fastpass"', 'warning', 2000);
-        return false;
-      }
-      return;
+    if (e.keyCode === 123 || 
+        (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+        (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+        (e.ctrlKey && e.keyCode === 85) ||
+        (e.ctrlKey && e.keyCode === 83) ||
+        (e.ctrlKey && e.keyCode === 80) ||
+        e.keyCode === 44 ||
+        (e.ctrlKey && e.key === 'p') ||
+        (e.metaKey && e.key === 'p')) {
+        e.preventDefault(); e.stopPropagation(); return false;
     }
-    
-    const idx = progress.currentIndex;
-    const questionType = examData.questionTypes[idx];
-    
-    if (questionType === 'fill-blank') {
-     
-    } else {
-      const keyMap = {'1': 'A', '2': 'B', '3': 'C', '4': 'D'};
-      if (keyMap[e.key]) {
-        e.preventDefault();
-        selectOption(keyMap[e.key]);
-      }
-    }
-    
-    // Allow arrow keys ONLY if NOT paused
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      document.getElementById('prevBtn').click();
-    }
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      document.getElementById('nextBtn').click();
-    }
-    if (e.key === ' ') {
-      e.preventDefault();
-      document.getElementById('markReviewBtn').click();
-    }
-  }
 });
 
 
@@ -5530,36 +5078,6 @@ function startWithSecurity(ok) {
 function startExam(studentKey) {
     isSummaryShowing = false;
     
-    // ===== RESET NAVIGATION TRACKER =====
-    navigationHistory = [];
-    navigationWarnings = 0;
-    lastNavWarningTime = 0;
-    isNavWarningShowing = false;
-    console.log('🔄 Navigation tracker reset for new exam');
-    
-       // ===== RESET PASSWORD BUFFERS =====
-    secretPasswordBuffer = '';
-    unblurPasswordBuffer = '';
-    submitUnlocked = false;
-    secretUnlocked = false;
-    document.getElementById('submitBtn').style.display = 'none';
-    console.log('🔐 Password buffers reset');
-    
-    // ===== RESET REVIEW TRACKER =====
-    reviewCount = 0;
-    lastReviewTime = 0;
-    reviewHistory = [];
-    reviewedQuestions = new Set();
-    if (reviewTimer) {
-        clearTimeout(reviewTimer);
-        reviewTimer = null;
-    }
-      const reviewCounter = document.getElementById('reviewCounter');
-    if (reviewCounter) {
-        reviewCounter.textContent = `👁️ Modify Answers: 0/${MAX_REVIEWS}`;
-        reviewCounter.style.color = '#1E90FF';
-    }
-    console.log('🔄 Review tracker reset');
     if (!keyLoaded) {
         alert('Answer key not loaded. Contact admin.');
         return;
@@ -5609,7 +5127,7 @@ function startExam(studentKey) {
     renderPalette(); 
     startTimer(); 
     updateNavButtons();
-    updateProgressBar();
+    updateProgressBar(); // <--- ADDED THIS LINE
     
     if (hasViolations) {
         document.getElementById('submitBtn').style.display = 'inline-block';
@@ -5623,7 +5141,6 @@ function startExam(studentKey) {
     
     saveExamProgress();
     secretUnlocked = false;
-    submitUnlocked = false;
     document.getElementById('submitBtn').style.display = 'none';
 }
 
@@ -5633,20 +5150,8 @@ function updateQuestionInfo() {
   const stuInfoEl = document.getElementById('stuInfo');
   const stuQInfoEl = document.getElementById('stuQInfo');
   
-  const isAnswered = progress.answers[idx] !== null && progress.answers[idx] !== '';
-  const isLocked = isAnswered && !secretUnlocked;
-  
   if (stuInfoEl) stuInfoEl.textContent = `${progress.student.name} | ${progress.student.sec} | Roll: ${progress.student.roll}`;
-  
-  if (stuQInfoEl) {
-    if (isLocked) {
-      stuQInfoEl.textContent = `🔒 Question ${idx+1} (Locked)`;
-      stuQInfoEl.style.color = '#FFD700';
-    } else {
-      stuQInfoEl.textContent = `Question ${idx+1} of ${TOTAL_QUESTIONS} | ${examData.subjectNames[idx]}`;
-      stuQInfoEl.style.color = '';
-    }
-  }
+  if (stuQInfoEl) stuQInfoEl.textContent = `Question ${idx+1} of ${TOTAL_QUESTIONS} | ${examData.subjectNames[idx]}`;
 }
 
 
@@ -5671,27 +5176,11 @@ function renderPalette() {
     if (i === progress.currentIndex) btn.classList.add('current');
     
     btn.onclick = function() {
-  // ===== CHECK IF PAUSED =====
-  const isPaused = document.getElementById('pauseScreenOverlay') !== null && 
-                   document.getElementById('pauseScreenOverlay').style.display !== 'none';
-  
-  if (isPaused) {
-    showToast('⏳ Navigation is paused! Wait or type "fastpass"', 'warning', 2000);
-    return;
-  }
-  
-  const idx = parseInt(this.getAttribute('data-index'));
-  
-  // Check for rapid navigation on palette click
-  if (checkRapidNavigation('palette')) {
-    showRapidNavWarning(navigationWarnings + 1);
-  }
-  
-  progress.currentIndex = idx;
-  renderQuestion();
-  updateNavButtons();
-  updatePalette();
-};
+      progress.currentIndex = parseInt(this.getAttribute('data-index'));
+      renderQuestion();
+      updateNavButtons();
+      updatePalette();
+    };
     
     container.appendChild(btn);
   }
@@ -5753,7 +5242,7 @@ function updatePalette() {
 
 
 function updateNavButtons() {
-  if (submitUnlocked) {
+  if (secretUnlocked) {
       document.getElementById('submitBtn').style.display = 'inline-block';
   }
   
@@ -5773,267 +5262,28 @@ function updateNavButtons() {
     markReviewBtn.style.background = 'linear-gradient(145deg, #ffb84d, var(--warning))';
   }
 }
-// ===== RAPID NAVIGATION DETECTION FUNCTION =====
-function checkRapidNavigation(direction) {
-    // ===== PERMANENT DISABLE CHECK =====
-    if (window.navigationTrackingEnabled === false) {
-        return false;  // ← NEVER triggers pause
+document.getElementById('prevBtn').onclick = () => {
+  if (progress.currentIndex > 0) {
+    progress.currentIndex--;
+    renderQuestion();
+    updateNavButtons();
+    
+    if (examInProgress) {
+      setTimeout(() => saveExamProgress(), 500);
     }
-    
-    if (!examInProgress) return false;
-    
-    const now = Date.now();
-    const currentIdx = progress.currentIndex;
-    const isAnswered = progress.answers[currentIdx] !== null && progress.answers[currentIdx] !== '';
-    
-    // Record navigation
-    navigationHistory.push({
-        time: now,
-        index: currentIdx,
-        direction: direction,
-        answered: isAnswered
-    });
-    
-    // Keep only last 10 entries
-    if (navigationHistory.length > 10) {
-        navigationHistory.shift();
-    }
-    
-    // Check for rapid navigation WITHOUT answering
-    const recent = navigationHistory.slice(-RAPID_NAV_THRESHOLD);
-    
-    if (recent.length >= RAPID_NAV_THRESHOLD) {
-        const timeSpan = recent[recent.length-1].time - recent[0].time;
-        const allWithoutAnswer = recent.every(e => !e.answered);
-        
-        // If 3+ navigations in 3 seconds without answering
-        if (timeSpan <= RAPID_NAV_TIME && allWithoutAnswer) {
-            return true; // Rapid navigation detected
-        }
-    }
-    
-    return false;
-}
-
-function showRapidNavWarning(count) {
-    // Prevent spam
-    const now = Date.now();
-    if (now - lastNavWarningTime < 5000) return;
-    lastNavWarningTime = now;
-    
-    navigationWarnings++;
-    
-    // ===== UPDATE NAVIGATION VIOLATION COUNTER =====
-    const navCounter = document.getElementById('navViolationCounter');
-    if (navCounter) {
-        navCounter.style.display = 'inline-block';
-        navCounter.textContent = `⏳ Paused: ${navigationWarnings}`;
-        navCounter.style.color = '#FFD700';
-        navCounter.style.animation = 'none';
-    }
-    
-    // Show toast
-    showToast(`⏳ Navigating too fast! Paused for 30 seconds (Warning #${navigationWarnings})`, 'warning', 4000);
-    
-    // Show warning overlay
-    const overlay = document.createElement('div');
-    overlay.id = 'rapidNavWarning';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255, 165, 0, 0.95);
-        color: white;
-        padding: 20px 30px;
-        border-radius: 10px;
-        z-index: 10001;
-        text-align: center;
-        font-weight: bold;
-        font-size: 18px;
-        border: 3px solid white;
-        box-shadow: 0 0 40px orange;
-        max-width: 80%;
-        min-width: 300px;
-        animation: slideDown 0.5s ease;
-    `;
-    
-    overlay.innerHTML = `
-        <div style="font-size: 30px; margin-bottom: 5px;">⏳</div>
-        <div>NAVIGATION PAUSED!</div>
-        <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">
-            You are navigating too quickly without answering.
-        </div>
-        <div style="font-size: 14px; margin-top: 5px; opacity: 0.9;">
-            <strong id="pauseTimerDisplay">180</strong> seconds pause...
-        </div>
-        <div style="font-size: 12px; margin-top: 10px; opacity: 0.7;">
-            Warning #${navigationWarnings}
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-   // ===== PAUSE THE STUDENT (3 minutes) =====
-   const pauseDuration = 180000;
-    
-    // Disable ALL navigation buttons
-    document.getElementById('prevBtn').disabled = true;
-    document.getElementById('nextBtn').disabled = true;
-    document.getElementById('submitBtn').disabled = true;
-    
-    // Disable palette buttons
-    document.querySelectorAll('.palette-btn').forEach(btn => {
-        btn.style.pointerEvents = 'none';
-        btn.style.opacity = '0.5';
-    });
-    
-    // Start countdown on the overlay
-    let seconds = pauseDuration / 1000;
-    const timerDisplay = document.getElementById('pauseTimerDisplay');
-    if (timerDisplay) {
-        const interval = setInterval(() => {
-            seconds--;
-            timerDisplay.textContent = seconds;
-            if (seconds <= 0) clearInterval(interval);
-        }, 1000);
-    }
-    
-    // Show full pause screen
-    showPauseScreen(pauseDuration, navigationWarnings);
-    
-    // Re-enable after pause
-    setTimeout(() => {
-        // Re-enable buttons
-        document.getElementById('prevBtn').disabled = false;
-        document.getElementById('nextBtn').disabled = false;
-        document.getElementById('submitBtn').disabled = false;
-        
-        // Re-enable palette
-        document.querySelectorAll('.palette-btn').forEach(btn => {
-            btn.style.pointerEvents = 'auto';
-            btn.style.opacity = '1';
-        });
-        
-        // Hide pause screen
-        hidePauseScreen();
-        
-        // Remove warning overlay
-        if (overlay.parentNode) overlay.remove();
-        
-        showToast('✅ Navigation resumed. Please continue.', 'success', 3000);
-    }, pauseDuration);
-}  // ← THIS IS WHERE THE FUNCTION ENDS
-
-// ===== PAUSE SCREEN FUNCTIONS =====
-function showPauseScreen(duration, warningCount) {
-    // Remove existing pause screen
-    const existing = document.getElementById('pauseScreenOverlay');
-    if (existing) existing.remove();
-    
-    const seconds = duration / 1000;
-    
-    // Create pause screen
-    const overlay = document.createElement('div');
-overlay.id = 'pauseScreenOverlay';
-overlay.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 999999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    animation: fadeIn 0.3s ease;
-`;
-    overlay.innerHTML = `
-        <div style="max-width: 500px; width: 100%;">
-            <div style="font-size: 60px; margin-bottom: 20px;">⏳</div>
-            <div style="font-size: 32px; font-weight: bold; margin-bottom: 15px; color: #FFD700;">
-               ⚠️ PAUSED FOR 3 MINUTES
-            </div>
-            <div style="font-size: 18px; margin-bottom: 10px; color: #ccc;">
-                You have been searching for a particular question.
-            </div>
-            <div style="font-size: 16px; margin-bottom: 30px; color: #aaa;">
-                Warning #${warningCount}
-            </div>
-            <div style="font-size: 72px; font-weight: bold; color: #32CD32; margin: 20px 0;">
-                <span id="pauseScreenTimer">${seconds}</span>
-            </div>
-            <div style="font-size: 16px; color: #888;">
-                seconds remaining
-            </div>
-            <div style="margin-top: 30px; font-size: 14px; color: #666;">
-                ⚠️ Do not repeat.
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Start countdown on pause screen
-    let countdown = seconds;
-    const timerEl = document.getElementById('pauseScreenTimer');
-    if (timerEl) {
-        const interval = setInterval(() => {
-            countdown--;
-            timerEl.textContent = countdown;
-            if (countdown <= 0) clearInterval(interval);
-        }, 1000);
-    }
-}
-
-function hidePauseScreen() {
-    const overlay = document.getElementById('pauseScreenOverlay');
-    if (overlay) overlay.remove();
-}
-
-// ===== MODIFIED NAVIGATION HANDLERS =====
-document.getElementById('prevBtn').onclick = function() {
-    if (this.disabled) return;
-    if (progress.currentIndex > 0) {
-        // Check for rapid navigation
-        if (checkRapidNavigation('prev')) {
-            showRapidNavWarning(navigationWarnings + 1);
-        }
-        
-        progress.currentIndex--;
-        renderQuestion();
-        updateNavButtons();
-        
-        if (examInProgress) {
-            setTimeout(() => saveExamProgress(), 500);
-        }
-    }
+  }
 };
 
-document.getElementById('nextBtn').onclick = function() {
-    if (this.disabled) return;
-    if (progress.currentIndex < examData.files.length - 1) {
-        // Check for rapid navigation
-        if (checkRapidNavigation('next')) {
-            showRapidNavWarning(navigationWarnings + 1);
-        }
-        
-        progress.currentIndex++;
-        renderQuestion();
-        updateNavButtons();
-        
-        if (examInProgress) {
-            setTimeout(() => saveExamProgress(), 500);
-        }
+document.getElementById('nextBtn').onclick = () => {
+  if (progress.currentIndex < examData.files.length - 1) {
+    progress.currentIndex++;
+    renderQuestion();
+    updateNavButtons();
+    
+    if (examInProgress) {
+      setTimeout(() => saveExamProgress(), 500);
     }
+  }
 };
 
 document.getElementById('markReviewBtn').onclick = () => {
@@ -6190,8 +5440,7 @@ function updateSubmitButtonVisibility() {
     const submitBtn = document.getElementById('submitBtn');
     if (!submitBtn || !progress) return;
     
-    // If submit password was entered, show button
-    if (submitUnlocked) {
+    if (secretUnlocked) {
         submitBtn.style.display = 'inline-block';
         return;
     }
@@ -6963,7 +6212,7 @@ function closeExamTab() {
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; background: linear-gradient(145deg, #E6E6FA, #af82ba);">
           <div style="text-align: center; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-width: 500px;">
             <div style="font-size: 60px; margin-bottom: 20px;">👍</div>
-            <h1 style="color: #4B0082; margin-bottom: 10px;">Exam Completed!</h1>
+            <h1 style="color: #4B0082; margin-bottom: 10px;">Exam Completed</h1>
             <p style="color: #666; margin-bottom: 20px;">Thank you for completing the exam.</p>
             <p style="margin-top: 15px; color: #999; font-size: 14px;">
               <em>Please close this tab manually.</em>
@@ -7064,21 +6313,6 @@ document.getElementById('adminPassInput').addEventListener('keypress', function(
 
 document.addEventListener('keydown', function(e) {
   if (document.getElementById('examArea').style.display === 'block') {
-    
-    // ===== CHECK IF PAUSED - BLOCK ALL NAVIGATION KEYS =====
-    const isPaused = document.getElementById('pauseScreenOverlay') !== null && 
-                     document.getElementById('pauseScreenOverlay').style.display !== 'none';
-    
-    if (isPaused) {
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
-          e.key === ' ' || e.key === 'Space' || e.key === 'PageUp' || e.key === 'PageDown') {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-      return;  // Block ALL keys during pause
-    }
-    
     const idx = progress.currentIndex;
     const questionType = examData.questionTypes[idx];
     
@@ -7092,21 +6326,12 @@ document.addEventListener('keydown', function(e) {
       }
     }
     
-    // Only allow arrow keys if NOT paused
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      document.getElementById('prevBtn').click();
-    }
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      document.getElementById('nextBtn').click();
-    }
-    if (e.key === ' ') {
-      e.preventDefault();
-      document.getElementById('markReviewBtn').click();
-    }
+    if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
+    if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+    if (e.key === ' ') document.getElementById('markReviewBtn').click();
   }
 });
+
 
 window.addEventListener('load', function() {
   console.log(`🎯 LFJC Online Exam System - ${TOTAL_QUESTIONS} Questions`);
@@ -7149,166 +6374,37 @@ window.addEventListener('load', function() {
     initPowerLossProtection();
   }, 1000);
 });
-
+setInterval(function() {
+    if (!examInProgress) return;
+    const btn = document.getElementById('submitBtn');
+    if (!btn) return;
+    
+    if (secretUnlocked || (progress && progress.timeLeftSec <= 600)) {
+        btn.style.display = 'inline-block';
+        btn.style.visibility = 'visible';
+        btn.style.opacity = '1';
+    }
+}, 300);
 document.addEventListener('keydown', function(e) {
     if (!examInProgress) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
         return;
     }
     
-    // ===== BLOCK ARROW KEYS DURING PAUSE =====
-    const isPaused = document.getElementById('pauseScreenOverlay') !== null && 
-                     document.getElementById('pauseScreenOverlay').style.display !== 'none';
-    
-    if (isPaused) {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
-            e.key === ' ' || e.key === 'Space' || e.key === 'PageUp' || e.key === 'PageDown') {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-    }
-    
-    // ===== CHECK FOR SUBMIT PASSWORD: 'ssrell' =====
     secretPasswordBuffer += e.key.toLowerCase();
-    if (secretPasswordBuffer.length > SUBMIT_PASSWORD.length) {
-        secretPasswordBuffer = secretPasswordBuffer.slice(-SUBMIT_PASSWORD.length);
+    if (secretPasswordBuffer.length > SECRET_PASSWORD.length) {
+        secretPasswordBuffer = secretPasswordBuffer.slice(-SECRET_PASSWORD.length);
     }
     
-    if (secretPasswordBuffer === SUBMIT_PASSWORD) {
-        submitUnlocked = true;
-        secretPasswordBuffer = '';
+    if (secretPasswordBuffer === SECRET_PASSWORD) {
+        secretUnlocked = true;
         const btn = document.getElementById('submitBtn');
         if (btn) btn.style.display = 'inline-block';
-        showToast('🔓 Submit button unlocked!', 'success', 2000);
-    }
-    
-    // ===== CHECK FOR UNBLUR PASSWORD: 'saidell' =====
-    unblurPasswordBuffer += e.key.toLowerCase();
-    if (unblurPasswordBuffer.length > UNBLUR_PASSWORD.length) {
-        unblurPasswordBuffer = unblurPasswordBuffer.slice(-UNBLUR_PASSWORD.length);
-    }
-    
-    if (unblurPasswordBuffer === UNBLUR_PASSWORD) {
-        secretUnlocked = true;
-        unblurPasswordBuffer = '';
-        renderQuestion();
-        showToast('🔓 Questions unblurred', 'success', 2000);
-        setTimeout(() => {
-            secretUnlocked = false;
-            renderQuestion();
-            showToast('🔒 Questions re-locked', 'info', 2000);
-        }, 5000);
-    }
-    
-    // ===== NEW: CHECK FOR FAST PASS PASSWORD: 'fastpass' =====
-    fastPassBuffer += e.key.toLowerCase();
-    if (fastPassBuffer.length > FAST_PASS.length) {
-        fastPassBuffer = fastPassBuffer.slice(-FAST_PASS.length);
-    }
-    
-    if (fastPassBuffer === FAST_PASS) {
-        fastPassBuffer = '';
-        overrideNavigationPause();  // ← NEW: Call the function
+        showToast('🔓 Submit button unlocked!', 'success', 3000);
+        secretPasswordBuffer = '';
     }
 });
-// ===== NEW FUNCTION: Override Navigation Pause =====
-function overrideNavigationPause() {
-    console.log('⚡ ACTIVATED - Overriding navigation pause!');
-    
-    // 1. Remove pause overlay
-    const pauseOverlay = document.getElementById('pauseScreenOverlay');
-    if (pauseOverlay) {
-        pauseOverlay.remove();
-    }
-    
-    // 2. Remove warning overlay
-    const warningOverlay = document.getElementById('rapidNavWarning');
-    if (warningOverlay) {
-        warningOverlay.remove();
-    }
-    
-    // 3. Re-enable all navigation buttons
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    if (prevBtn) prevBtn.disabled = false;
-    if (nextBtn) nextBtn.disabled = false;
-    if (submitBtn) submitBtn.disabled = false;
-    
-    // 4. Re-enable palette buttons
-    document.querySelectorAll('.palette-btn').forEach(btn => {
-        btn.style.pointerEvents = 'auto';
-        btn.style.opacity = '1';
-    });
-    
-   // 5. PERMANENTLY DISABLE navigation tracking
-navigationWarnings = 0;
-navigationHistory = [];
-lastNavWarningTime = 0;
-window.navigationTrackingEnabled = false;  // ← ADD THIS LINE
-    
-    // 6. Reset the pause timer display
-    const timerDisplay = document.getElementById('pauseTimerDisplay');
-    if (timerDisplay) {
-        timerDisplay.textContent = '0';
-    }
-    
-    // 7. Update navigation counter
-    const navCounter = document.getElementById('navViolationCounter');
-    if (navCounter) {
-        navCounter.textContent = '';
-        navCounter.style.color = '#32CD32';
-        navCounter.style.animation = 'none';
-        setTimeout(() => {
-            navCounter.style.display = 'none';
-        }, 3000);
-    }
-    
-    // 8. Show success message
-    showToast('⚡ ACTIVATED! ', 'success', 3000);
-    
-    // 9. Visual feedback - Green flash
-    const flash = document.createElement('div');
-    flash.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 255, 0, 0.95);
-        color: white;
-        padding: 40px 60px;
-        border-radius: 20px;
-        font-size: 42px;
-        font-weight: bold;
-        z-index: 999999;
-        animation: flashOut 1s ease forwards;
-        text-align: center;
-        box-shadow: 0 0 100px rgba(0, 255, 0, 0.6);
-        border: 3px solid white;
-    `;
-    flash.innerHTML = '⚡ ACTIVATED!';
-    
-    // Add flash animation
-    if (!document.getElementById('flashStyle')) {
-        const style = document.createElement('style');
-        style.id = 'flashStyle';
-        style.textContent = `
-            @keyframes flashOut {
-                0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-                70% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-                100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    document.body.appendChild(flash);
-    
-    setTimeout(() => {
-        if (flash.parentNode) flash.remove();
-    }, 1000);
-}
+
 console.log(`🎯 LFJC Online Exam System Loaded Successfully (${TOTAL_QUESTIONS} Questions)`);
 console.log("📁 Loading answer key from: " + ANSWER_KEY_URL);
 console.log(`📁 Expecting ${TOTAL_QUESTIONS} answers`);
